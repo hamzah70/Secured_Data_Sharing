@@ -39,6 +39,7 @@ class didStructure:
 									label=None
 								)
 							)
+
 	def encryptData(self, data):
 		encrypted = self.__publicKey.encrypt(
 						message,
