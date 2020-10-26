@@ -3,12 +3,7 @@ import datetime
 import mysql.connector as sql
 from random import randint, choice, uniform, shuffle
 
-db = sql.connect(
-	host="localhost",
-	user = "root",
-	passwd = "himraj18",
-	database = "ip"
-)
+db = sql.connect(user='sql12371853', passwd='Q4EwHcCGww',host='sql12.freesqldatabase.com', database = "sql12371853", port = "3306")
 
 Patient_Number = [i for i in range(1,51)]
 shuffle(Patient_Number)
