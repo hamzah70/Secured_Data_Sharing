@@ -4,13 +4,24 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 
 class didStructure:
-	__privateKey = None			# Private data member
-	__dataAccess = {}			# Private data member
-	__publicKey = None  		# Public data member
+	# Private data members
+	__privateKey = None			
+	__dataAccess = []			
+	__publicKey = None  		
+	__algorithm = None
 
-	def __init__(self, **kwargs):
-		self.__dataAccess = kwargs
+	def __init__(self, *args, algorithm):
+		""" args contain a list of all the tuples from the hospital 
+		database as variables. All those tuples that are required 
+		by the insurance data have their corresponding variable 
+		names values as 1 and those tuples which the insurance 
+		company does not have access to have the corresponding 
+		variable name value as 0 """
+
+		self.__dataAccess = args
+		self.__algorithm = algorithm
 		self.publicKey, self.__privateKey = self.__generateKeys()
+		self.uniqueID = id(self)
 
 	def __generateKeys(self):
 		private_key = rsa.generate_private_key(
@@ -31,7 +42,7 @@ class didStructure:
 		return self.__publicKey
 
 	def decryptData(self, data):
-		original_message = self.__privateKey.decrypt(
+		decryptedData = self.__privateKey.decrypt(
 								encrypted,
 								padding.OAEP(
 									mgf=padding.MGF1(algorithm=hashes.SHA256()),
@@ -39,9 +50,10 @@ class didStructure:
 									label=None
 								)
 							)
+		return decryptedData
 
 	def encryptData(self, data):
-		encrypted = self.__publicKey.encrypt(
+		encryptedData = self.__publicKey.encrypt(
 						message,
 						padding.OAEP(
 							mgf=padding.MGF1(algorithm=hashes.SHA256()),
@@ -49,4 +61,11 @@ class didStructure:
 							label=None
 						)
 					)
+		return encryptedData
+
+	def executeCode(data):
+		for i in range(len(data)):
+			data[i] = decryptData(data[i])
+
+
 
