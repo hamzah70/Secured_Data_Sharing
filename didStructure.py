@@ -16,7 +16,7 @@ class did:
 	__policy = []		
 
 	def __init__(self, *args, algorithm, custom_policy):
-		""" args contain a  tuple from the hospital database as 
+		""" args contain a tuple from the hospital database as 
 		variable. All those attributes that are required by the 
 		insurance data have their corresponding variable 
 		names values as 1 and those tuples which the insurance 
@@ -27,13 +27,14 @@ class did:
 		self.__algorithm = algorithm
 		__updatePolicy(custom_policy)
 
-		for i in range(len(policy)):
-			public,private = self.__generateKeys()
+		for i in range(len(self.__policy)):
+			public, private = self.__generateKeys()
 			if policy[i]:
-				self.__publicKey[i]= public
-				self.__privateKey[i]= private
+				self.__publicKey.append(public)
+				self.__privateKey.append(private)
 			else:
-				self.__privateKey[i]= private
+				self.__privateKey[i].append("gibberish")
+				self.__publicKey[i].append("gibberish")
 
 		__process()
 
@@ -48,7 +49,7 @@ class did:
 		public_key = private_key.public_key()
 		return public_key, private_key
 
-	def __updatePolicy(self,custom_policy):
+	def __updatePolicy(self, custom_policy):
 		for i in range(len(self.__dataAccess)):
 			if custom_policy[i]:
 				self.__policy.append(1)
