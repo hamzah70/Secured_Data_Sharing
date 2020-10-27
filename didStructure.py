@@ -1,26 +1,42 @@
+
+# DID Document
+
+from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 
-class didStructure:
-	# Private data members
-	__privateKey = None			
-	__dataAccess = []			
-	__publicKey = None  		
-	__algorithm = None
+class did:
 
-	def __init__(self, *args, algorithm):
-		""" args contain a list of all the tuples from the hospital 
-		database as variables. All those tuples that are required 
-		by the insurance data have their corresponding variable 
+	# Private data members
+	__privateKey = {}			
+	__publicKey = {}  		
+	__algorithm = {}
+	__dataAccess = []
+	__policy = []		
+
+	def __init__(self, *args, algorithm, custom_policy):
+		""" args contain a  tuple from the hospital database as 
+		variable. All those attributes that are required by the 
+		insurance data have their corresponding variable 
 		names values as 1 and those tuples which the insurance 
 		company does not have access to have the corresponding 
-		variable name value as 0 """
+		variable name value as 0 in the policy. """
 
 		self.__dataAccess = args
 		self.__algorithm = algorithm
-		self.publicKey, self.__privateKey = self.__generateKeys()
+		__updatePolicy(custom_policy)
+
+		for i in range(len(policy)):
+			public,private = self.__generateKeys()
+			if policy[i]:
+				self.__publicKey[i]= public
+				self.__privateKey[i]= private
+			else:
+				self.__privateKey[i]= private
+
+		__process()
+
 		self.uniqueID = id(self)
 
 	def __generateKeys(self):
@@ -32,6 +48,19 @@ class didStructure:
 		public_key = private_key.public_key()
 		return public_key, private_key
 
+	def __updatePolicy(self,custom_policy):
+		for i in range(len(self.__dataAccess)):
+			if custom_policy[i]:
+				self.__policy.append(1)
+			else:
+				self.__policy.append(0)
+
+	def __process(self):
+
+		for i in range(len(self.__dataAccess)):
+			self.__dataAccess[i] = encryptData(self.__dataAccess[i],self.__privateKey[i])
+
+
 	def setDataAccess(self, **kwargs):
 		self.__dataAccess = kwargs
 
@@ -41,8 +70,8 @@ class didStructure:
 	def getPublicKey(self):
 		return self.__publicKey
 
-	def decryptData(self, data):
-		decryptedData = self.__privateKey.decrypt(
+	def decryptData(self, data, key):
+		decryptedData = key.decrypt(
 								encrypted,
 								padding.OAEP(
 									mgf=padding.MGF1(algorithm=hashes.SHA256()),
@@ -52,8 +81,8 @@ class didStructure:
 							)
 		return decryptedData
 
-	def encryptData(self, data):
-		encryptedData = self.__publicKey.encrypt(
+	def encryptData(self, data, key):
+		encryptedData = key.encrypt(
 						message,
 						padding.OAEP(
 							mgf=padding.MGF1(algorithm=hashes.SHA256()),
@@ -66,6 +95,3 @@ class didStructure:
 	def executeCode(data):
 		for i in range(len(data)):
 			data[i] = decryptData(data[i])
-
-
-
