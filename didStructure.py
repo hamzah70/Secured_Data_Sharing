@@ -33,8 +33,8 @@ class did:
 				self.__publicKey.append(public)
 				self.__privateKey.append(private)
 			else:
-				self.__privateKey[i].append("gibberish")
-				self.__publicKey[i].append("gibberish")
+				self.__privateKey.append("gibberish")
+				self.__publicKey.append("gibberish")
 
 		__process()
 
