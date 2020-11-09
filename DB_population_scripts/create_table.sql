@@ -1,7 +1,5 @@
 CREATE TABLE `hospital` (
 	`Patient_Number` int NOT NULL,
-	`DID_Number` int DEFAULT NULL,
-
 	`Name` varchar(50) NOT NULL,
 	`Age` int NOT NULL,
 	`Gender` VARCHAR(10) NOT NULL,
@@ -51,8 +49,6 @@ CREATE TABLE `hospital` (
 
 CREATE TABLE `insurance` (
 	`Case_Number` int NOT NULL,
-	`DID_Number` int DEFAULT NULL,
-
 	`Name` varchar(50) NOT NULL,
 	`Age` int NOT NULL,
 	`Gender` VARCHAR(10) NOT NULL,
