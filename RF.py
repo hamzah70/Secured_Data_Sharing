@@ -3,12 +3,12 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.asymmetric import padding
-from temp import column_sets
+from clustering import column_sets
 
 class ring_fence:
 
-    self.__RID = None
-    self.Data_Block = {}
+    __RID = None
+    Data_Block = {}
 
     def __init__(self, rid):
         self.__RID = rid
@@ -111,7 +111,7 @@ class rid:
     def getPublicKey(self):
         return self.__publicKey
 
-	def __generateKeys(self):
+    def __generateKeys(self):
         private_key = rsa.generate_private_key(
             public_exponent=65537,
             key_size=2048,

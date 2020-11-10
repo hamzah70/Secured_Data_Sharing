@@ -5,7 +5,8 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.asymmetric import padding
-from temp import column_sets
+from clustering import column_sets
+from RF import *
 
 class did:
 
@@ -16,15 +17,9 @@ class did:
 	__dataAccess = []
 	__policy = []		
 
-	def __init__(self, *args, algorithm, custom_policy):
-		""" args contain a tuple from the hospital database as 
-		variable. All those attributes that are required by the 
-		insurance data have their corresponding variable 
-		names values as 1 and those tuples which the insurance 
-		company does not have access to have the corresponding 
-		variable name value as 0 in the policy. """
+	def __init__(self, algorithm, custom_policy):
 
-		self.__dataAccess = args
+		for d in (custom_policy["health_records"]["Medical_Records_1"], custom_policy["health_records"]["Medical_Records_2"], custom_policy["health_records"]["Medical_Records_3"], custom_policy["health_records"]["Addictions"]): self.__dataAccess.update(d)
 		self.__algorithm = algorithm
 		__updatePolicy(custom_policy)
 
@@ -35,7 +30,7 @@ class did:
 				self.__privateKey.append(private)
 			else:
 				self.__privateKey.append("gibberish")
-				self.__publicKey.append("gibberish")
+				self.__publicKey.append(public)
 
 		__process()
 
@@ -51,17 +46,20 @@ class did:
 		return public_key, private_key
 
 	def __updatePolicy(self, custom_policy):
-		for i in range(len(self.__dataAccess)):
-			if custom_policy[i]:
+		for i, k in enumerate(custom_policy["health_records"].keys()):
+			encrypt = 0
+			for key,value in custom_policy["health_records"][k].items():
+				if value==1:
+					encrypt = 1
+					break
+			if encrypt:
 				self.__policy.append(1)
 			else:
 				self.__policy.append(0)
 
 	def __process(self):
-
 		for i in range(len(self.__dataAccess)):
 			self.__dataAccess[i] = encryptData(self.__dataAccess[i],self.__privateKey[i])
-
 
 	def setDataAccess(self, **kwargs):
 		self.__dataAccess = kwargs
