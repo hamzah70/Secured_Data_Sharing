@@ -72,7 +72,7 @@ class rid:
     __publicKey = {}
     __shared_data = {}
     __confidential_data = []
-    __dataAccess = []  		
+    __dataAccess = {}  		
 
     def __init__(self, policy):
         for d in (policy["health_records"]["Medical_Records_1"], policy["health_records"]["Medical_Records_2"], 
