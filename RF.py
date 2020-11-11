@@ -14,28 +14,29 @@ class ring_fence:
         self.__RID = rid
 
     def create(self, *args):
-
-        for ring in self.__RID.getPolicy():
-            self.Data_Block[i] = [] 
+        for ring in self.__RID.getPolicy()["health_records"].keys():
+            self.Data_Block[i] = {} 
 
         for label, data in args:
-            for ring in self.__RID.getPolicy():
-
-                if label in self.__RID.getPolicy()[ring]:
-
+            for ring in self.__RID.getPolicy()["health_records"].keys():
+                if label in self.__RID.getPolicy()["health_records"][ring]:
                     key = self.__RID.getPublicKey()[ring]
-                    Data_Block[ring].append(encryptData(data,key))
+                    encryptedData = encryptData(data,key)
+                    Data_Block[ring][label] = encryptData
+                else:
+                    Data_Block[ring][label] = None
 
         return Data_Block
 
-    def break_(self,keys):
-        Decrypted_Data = []
+    def break_(self, keys):
+        Decrypted_Data = {}
 
-        for ring in self.Data_Block:
-            for data in self.Data_Block[ring]:
-
-                key = keys[ring]
-                Decrypted_Data.append(decryptData(data,key))
+        for ring in self.Data_Block.keys():
+            key = keys[ring]
+            for k, v in self.Data_Block[ring].items():
+                if v!=None:
+                    decryptedData = decryptData(v,key)
+                    Decrypted_Data[k] = decryptedData
 
         return Decrypted_Data
 
@@ -70,25 +71,25 @@ class rid:
     __privateKey = {}			
     __publicKey = {}
     __shared_data = {}
-    __confidential_data = []  		
+    __confidential_data = []
+    __dataAccess = []  		
 
     def __init__(self, policy):
-
+        for d in (policy["health_records"]["Medical_Records_1"], policy["health_records"]["Medical_Records_2"], 
+            policy["health_records"]["Medical_Records_3"], policy["health_records"]["Addictions"]): self.__dataAccess.update(d)
         self.uniqueID = id(self)
         self.__policy = policy
         __update()
 
     def __update():
-
-        for attribute in self.__policy:
-            if attribute[1] == -1:
-                self.__confidential_data.append(attribute[0])
-
-            else:
-                if attribute[1] in self.__shared_data:
-                    self.__shared_data[attribute[1]].append(attribute[0])
-                else:
-                    self.__shared_data[attribute[1]] = [attribute[0]]
+        for i, k in enumerate(policy["health_records"].keys()):
+            encrypt = 0
+            for key, value in policy["health_records"][k].items():
+                if value==1:
+                    encrypt = 1
+                    break
+            if encrypt:
+                self.__shared_data.append(k)
 
         public, private = self.__generateKeys()
 
@@ -101,8 +102,9 @@ class rid:
             self.private_key[ring] = private
 
     def setPolicy(self, custom_policy ):
-
         self.__policy = custom_policy
+        for d in (policy["health_records"]["Medical_Records_1"], policy["health_records"]["Medical_Records_2"], 
+            policy["health_records"]["Medical_Records_3"], policy["health_records"]["Addictions"]): self.__dataAccess.update(d)
         __update()
 
     def getPolicy(self):
