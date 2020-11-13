@@ -1,4 +1,6 @@
 
+
+import uuid
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa
@@ -77,9 +79,34 @@ class rid:
     def __init__(self, policy):
         for d in (policy["health_records"]["Medical_Records_1"], policy["health_records"]["Medical_Records_2"], 
             policy["health_records"]["Medical_Records_3"], policy["health_records"]["Addictions"]): self.__dataAccess.update(d)
-        self.uniqueID = id(self)
+        self.uniqueID = __gen_ID()
         self.__policy = policy
         __update()
+
+
+    def __gen_ID(self):
+    	RID = set()
+		with open("RID.txt","r") as file:
+		data = file.readlines()
+		for i in data : 
+			RID.append(i)
+
+		file.close()
+
+		x = uuid.uuid1()
+		while x in RID:
+			x = uuid.uuid1()
+
+		RID.add(x)
+
+		with open("RID.txt","w") as file:
+			for i in RID:
+				file.write(i+"\n")
+
+		file.close()
+
+		return x
+
 
     def __update():
         for i, k in enumerate(policy["health_records"].keys()):
