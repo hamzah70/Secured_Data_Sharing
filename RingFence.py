@@ -17,12 +17,12 @@ class ring_fence:
         self.__RID = rid
 
     def create(self, *args):
-        for ring in self.__RID.getPolicy()["health_records"].keys():
+        for ring in self.__RID.getPolicy()["Health_Records"].keys():
             self.Data_Block[i] = {} 
 
         for label, data in args:
-            for ring in self.__RID.getPolicy()["health_records"].keys():
-                if label in self.__RID.getPolicy()["health_records"][ring]:
+            for ring in self.__RID.getPolicy()["Health_Records"].keys():
+                if label in self.__RID.getPolicy()["Health_Records"][ring]:
                     key = self.__RID.getPublicKey()[ring]
                     encryptedData = encryptData(data,key)
                     Data_Block[ring][label] = encryptData
@@ -78,8 +78,8 @@ class rid:
     __dataAccess = {}  		
 
     def __init__(self, policy):
-        for d in (policy["health_records"]["Medical_Records_1"], policy["health_records"]["Medical_Records_2"], 
-            policy["health_records"]["Medical_Records_3"], policy["health_records"]["Addictions"]): self.__dataAccess.update(d)
+        for d in (policy["Health_Records"]["Medical_Records_1"], policy["Health_Records"]["Medical_Records_2"], 
+            policy["Health_Records"]["Medical_Records_3"], policy["Health_Records"]["Addictions"]): self.__dataAccess.update(d)
         self.uniqueID = __gen_ID()
         self.__policy = policy
         __update()
@@ -110,9 +110,9 @@ class rid:
 
 
     def __update():
-        for i, k in enumerate(policy["health_records"].keys()):
+        for i, k in enumerate(policy["Health_Records"].keys()):
             encrypt = 0
-            for key, value in policy["health_records"][k].items():
+            for key, value in policy["Health_Records"][k].items():
                 if value==1:
                     encrypt = 1
                     break
@@ -131,8 +131,8 @@ class rid:
 
     def setPolicy(self, custom_policy ):
         self.__policy = custom_policy
-        for d in (policy["health_records"]["Medical_Records_1"], policy["health_records"]["Medical_Records_2"], 
-            policy["health_records"]["Medical_Records_3"], policy["health_records"]["Addictions"]): self.__dataAccess.update(d)
+        for d in (policy["Health_Records"]["Medical_Records_1"], policy["Health_Records"]["Medical_Records_2"], 
+            policy["Health_Records"]["Medical_Records_3"], policy["Health_Records"]["Addictions"]): self.__dataAccess.update(d)
         __update()
 
     def getPolicy(self):
