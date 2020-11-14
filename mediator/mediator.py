@@ -21,6 +21,8 @@ def createDiD():
 	if request.method == 'POST':
 		result = request.form
 
-
 if __name__ == "__main__":
+
+	# openssl req -x509 -newkey rsa:4096 -nodes -out cert.pem -keyout key.pem -days 365
+	app.run(ssl_context=('cert.pem', 'key.pem'))
 	app.run(host='0.0.0.0', port="5000", debug=True)
