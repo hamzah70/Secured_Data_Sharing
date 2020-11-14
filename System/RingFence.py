@@ -121,7 +121,7 @@ class ring_fence:
         self.__RID = rid
 
     def create(self, *args):
-<<<<<<< HEAD
+
         # Creates the ring fence based on policy agreement.
 
         for ring in self.__RID.__shared_data:
@@ -130,14 +130,13 @@ class ring_fence:
         for label, data in args:
             for ring in self.__RID.getSharedData():
                 if label in self.__RID.getSharedData()[ring]:
-=======
+
         for ring in self.__RID.getPolicy()["Health_Records"].keys():
             self.Data_Block[i] = {} 
 
         for label, data in args:
             for ring in self.__RID.getPolicy()["Health_Records"].keys():
                 if label in self.__RID.getPolicy()["Health_Records"][ring]:
->>>>>>> 7f87413339200e3061cf181c79c8c66f0d5262c5
                     key = self.__RID.getPublicKey()[ring]
                     encryptedData = encryptData(data,key)
                     Data_Block[ring][label] = encryptData
@@ -188,9 +187,6 @@ class ring_fence:
         return decryptedData
 
 
-<<<<<<< HEAD
-
-=======
 class rid:
 
     __uniqueID = None
@@ -273,4 +269,3 @@ class rid:
         )
         public_key = private_key.public_key()
         return public_key, private_key
->>>>>>> 7f87413339200e3061cf181c79c8c66f0d5262c5
