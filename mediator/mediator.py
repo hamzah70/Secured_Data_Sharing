@@ -6,7 +6,6 @@ from flask import make_response
 import mysql.connector
 from mysql.connector import Error
 import requests
-from didStructure import did
 
 
 app = Flask(__name__)
