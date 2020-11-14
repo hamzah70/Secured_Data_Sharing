@@ -1,4 +1,5 @@
-
+// Secured Data Movement
+// Data sharing policy for Hospital Database
 
 {
 	"user_data": { "Name": 0, "Age": 0, "Gender" : 0},
