@@ -3,12 +3,9 @@
 
 {
 	"User_Data": { "Name": 1, "Age": 1, "Gender" : 1, "Email" : 0,"Phone_Number" : 0 ,"Address" : 0},
-	"Health_Records": 
-	{ 
-		"Vitals": {"Height" : 1, "Weight" : 1, "Heart_Rate" : 0, "Blood_Pressure" : 0, "Blood_Oxygen" : 0, "Body_Fat" : 1, "Respiratory_Rate" : 0,"Cholestrol_Level" : 1,"Haemoglobin_Level" : 1},
-		"Critical_Diagnosis": {"Cancer_Type" : 1, "Cancer_Stage" : 1, "Heart_Disease" : 1, "Organ_Replacement" : 1,"Physical_Disability" : 1, "Surgeries" : 1, "Fractures" : 1},
-		"Lifestyle": { "Allergies" : 1, "Vitamin_Deficiency" : 1, "Diabetic" : 1,"Sleep_Duration" : 0 },
-		"Addictions": {	"Alcoholic": 1 , "Smoker" : 1, "Drug_Abuse" : 1, "Rehab":1 },
-		"Other": {"Last_Diagnosis_Report" : 0,"Primary_Doctor" : 0,"Patient_Number" : 0,"Registeration_Date" : 0,"Number_of_visits" : 0,"Corporate_Coverage" : 0}
-	}
+	"Vitals": {"Height" : 1, "Weight" : 1, "Heart_Rate" : 0, "Blood_Pressure" : 0, "Blood_Oxygen" : 0, "Body_Fat" : 1, "Respiratory_Rate" : 0,"Cholestrol_Level" : 1,"Haemoglobin_Level" : 1},
+	"Critical_Diagnosis": {"Cancer_Type" : 1, "Cancer_Stage" : 1, "Heart_Disease" : 1, "Organ_Replacement" : 1,"Physical_Disability" : 1, "Surgeries" : 1, "Fractures" : 1},
+	"Lifestyle": { "Allergies" : 1, "Vitamin_Deficiency" : 1, "Diabetic" : 1,"Sleep_Duration" : 0 },
+	"Addictions": {	"Alcoholic": 1 , "Smoker" : 1, "Drug_Abuse" : 1, "Rehab":1 },
+	"Other": {"Last_Diagnosis_Report" : 0,"Primary_Doctor" : 0,"Patient_Number" : 0,"Registeration_Date" : 0,"Number_of_visits" : 0,"Corporate_Coverage" : 0}
 }
