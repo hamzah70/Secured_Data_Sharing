@@ -130,13 +130,6 @@ class ring_fence:
         for label, data in args:
             for ring in self.__RID.getSharedData():
                 if label in self.__RID.getSharedData()[ring]:
-
-        for ring in self.__RID.getPolicy()["Health_Records"].keys():
-            self.Data_Block[i] = {} 
-
-        for label, data in args:
-            for ring in self.__RID.getPolicy()["Health_Records"].keys():
-                if label in self.__RID.getPolicy()["Health_Records"][ring]:
                     key = self.__RID.getPublicKey()[ring]
                     encryptedData = encryptData(data,key)
                     Data_Block[ring][label] = encryptData
@@ -206,27 +199,27 @@ class rid:
 
 
     def __gen_ID(self):
-    	RID = set()
-		with open("RID.txt","r") as file:
-		data = file.readlines()
-		for i in data : 
-			RID.append(i)
 
-		file.close()
+        RID = set()
+        with open("RID.txt","r") as file:
+            data = file.readlines()
+            for i in data :
+                RID.append(i)
+        file.close()
 
-		x = uuid.uuid1()
-		while x in RID:
-			x = uuid.uuid1()
+        x = uuid.uuid1()
+        while x in RID:
+            x = uuid.uuid1()
 
-		RID.add(x)
+        RID.add(x)
 
-		with open("RID.txt","w") as file:
-			for i in RID:
-				file.write(i+"\n")
+        with open("RID.txt","w") as file:
+            for i in RID:
+                file.write(i+"\n")
 
-		file.close()
+        file.close()
 
-		return x
+        return x
 
 
     def __update():
