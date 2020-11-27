@@ -11,9 +11,9 @@ import requests
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
-def sendHospital():
+def sendMediator():
 	print("hello")
-	r = requests.post('http://0.0.0.0:6000/', data = {'image_filename':'test.jpg', 'image_url': "http://images.come"})
+	r = requests.post('http://0.0.0.0:8080/', data = {'image_filename':'test.jpg', 'image_url': "http://images.come"})
 	return "abc"
 
 @app.route('/createdid', methods=['GET', 'POST'])
@@ -25,4 +25,4 @@ if __name__ == "__main__":
 
 	# openssl req -x509 -newkey rsa:4096 -nodes -out cert.pem -keyout key.pem -days 365
 	app.run(ssl_context=('cert.pem', 'key.pem'))
-	app.run(host='0.0.0.0', port="8080", debug=True)
+	app.run(host='0.0.0.0', port="5000", debug=True)
