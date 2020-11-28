@@ -1,6 +1,3 @@
-// Secured Data Movement
-// Data sharing policy for Hospital Database
-
 {
 	"User_Data": { "Name": 1, "Age": 1, "Gender" : 1, "Email" : 0,"Phone_Number" : 0 ,"Address" : 0},
 	"Vitals": {"Height" : 1, "Weight" : 1, "Heart_Rate" : 0, "Blood_Pressure" : 0, "Blood_Oxygen" : 0, "Body_Fat" : 1, "Respiratory_Rate" : 0,"Cholestrol_Level" : 1,"Haemoglobin_Level" : 1},

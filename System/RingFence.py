@@ -17,7 +17,7 @@ class rid:
             - Generates key pairs for different segments
     '''
 
-    __uniqueID = None
+    uniqueID = None
     __policy = None
     __privateKey = {}           
     __publicKey = {}
@@ -26,14 +26,15 @@ class rid:
 
     def __init__(self, policy_document):
 
-        self.uniqueID = __gen_ID()
+        self.uniqueID = self.__gen_ID()
 
-        with open(policy_document,"r") as file:
+        with open(policy_document) as file:
             self.__policy = json.load(file)
 
         file.close()
 
-        __update()
+        self.__update()
+
 
     def __gen_ID(self):
         # Generates a unique identifier and append it to the record of generated identifiers.
@@ -43,7 +44,7 @@ class rid:
         with open("RID.txt","r") as file:
             data = file.readlines()
             for i in data : 
-                RID.append(i)
+                RID.add(i)
 
         file.close()
 
@@ -58,33 +59,33 @@ class rid:
 
         file.close()
 
-        self.__uniqueID = x
+        return x
 
-    def __update():
+    def __update(self):
         # Resolves shareable data and generate keys
 
         for ring in self.__policy:
             self.__shared_data[ring] = []
             for attribute in self.__policy[ring]:
-                if ring[attribute] == 1:
+                if self.__policy[ring][attribute] == 1:
                     self.__shared_data[ring].append(attribute)
                 else:
                     self.__confidential_data.append(attribute)
 
         public, private = self.__generateKeys()
 
-        self.public_key["Secret"] = public
-        self.private_key["Secret"] = None
+        self.__publicKey["Secret"] = public
+        self.__privateKey["Secret"] = None
 
         for ring in self.__shared_data:
             public, private = self.__generateKeys()
-            self.public_key[ring] = public
-            self.private_key[ring] = private
+            self.__publicKey[ring] = public
+            self.__privateKey[ring] = private
 
     def setPolicy(self, custom_policy):
         with open(custom_policy,"r") as file:
             self.__policy = json.load(file)
-        __update()
+        self.__update()
 
     def getPolicy(self):
         return self.__policy
