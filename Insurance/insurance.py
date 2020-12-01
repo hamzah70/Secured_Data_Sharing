@@ -1,36 +1,70 @@
 # Secured Data Movement
-# Mediator Transaction
+# User Interface - Insurance
 
-from flask import Flask, render_template, redirect, url_for,request, jsonify, session
-from flask import make_response
-import mysql.connector
-from mysql.connector import Error
-import requests
+import mysql.connector as sql
+from RingFence import rid
 
-from insurance_UI import *
+db = sql.connect(user='root', passwd='&TDj6j7>',host='localhost')
+cursor=db.cursor()
+
+def registerUser():
+
+	print("Registering User...")
+
+	with open("Input.txt","r") as file:
+		Lines = file.readlines()
+		Data = {}
+		for x in Lines:
+			x = x.strip()
+			label,value = x.split(":")
+			Data[label]=value
+
+		print("Generating RID...")
+
+		RID = rid("Policy_Insurance")
+		Data["RID"]= RID.getuniqueID()
+		Document = pickle.dumps(RID)
+
+	file.close()
+
+	query="use Insurance;"
+	cursor.execute(query)
+	db.commit()
+
+	query = "insert into RID values (%s,%s)"
+	cursor.execute(query,(Data["RID"],Document))
+	db.commit()
+
+	# @ Himanshu
+	# query = "insert into Insurance values ?"
+	# cursor.execute(query,?)
+	# db.commit()
+
+	print("Registration Completed.")
+	print("RID : ",Data["RID"])
 
 
-app = Flask(__name__)
+	print("1 : Know Best Policy For Yourself")
+	print("2 : Exit")
 
-@app.route('/', methods=['GET', 'POST'])
-def sendMediator():
-	ridNumber = getRID()
-	r = requests.post('https://0.0.0.0:6000/getRID', data = {"rid": ridNumber}, verify = False)
-	return "abc"
+	n = int(input())
 
-@app.route('/get', methods=['GET', 'POST'])
-def getMediator():
-	if request.method == 'POST':
-		x = request.form['x']
-		print(" final result  :    ", x)
-	return "abc"
+	if n == 1:
+		print("Enter Your Hospital RID")
+		x = input()
 
-# @app.route('/createdid', methods=['GET', 'POST'])
-# def createDiD():
-# 	if request.method == 'POST':
-# 		result = request.form
+		#@Hamzah Send it to mediator!
 
-if __name__ == "__main__":
+		# y = recieve from mediator
 
-	# openssl req -x509 -newkey rsa:4096 -nodes -out cert.pem -keyout key.pem -days 365
-	app.run(host='0.0.0.0', port="5000", debug=True, ssl_context=('cert.pem', 'key.pem'))
+		print(y)
+
+	else:
+		print("Thank You.")
+		sys.exit(0)
+
+def getRID():
+	
+	print("Enter RID for a person you want best policy:  ")
+	ans = input()
+	return ans

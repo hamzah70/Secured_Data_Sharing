@@ -1,9 +1,9 @@
 {
 	"Details":
 	{
-		"Index": 2
-		"Creation": "Wed Dec  2 01:18:05 IST 2020"
-		"Period": "600 Days"
+		"Index": 2,
+		"Creation": "Wed Dec  2 01:18:05 IST 2020",
+		"Period": "600 Days",
 		"Organisation": "Hospital A"
 	}
 

@@ -120,8 +120,6 @@ class ring_fence:
         Data_Block["MetaData"]["RID"] = self.__RID.getID()
         Data_Block["MetaData"]["Policy"] = self.__RID.getPolicy()["Details"]
 
-        return Data_Block
-
     def dissolve(self, keys):
 
         Decrypted_Data = {}
@@ -134,6 +132,9 @@ class ring_fence:
                     Decrypted_Data[k] = decryptedData
 
         return Decrypted_Data
+
+    def getBlock(self):
+        return self.__Data_Block
 
     def encryptData(self, data, key):
         data = str([data]).encode()
