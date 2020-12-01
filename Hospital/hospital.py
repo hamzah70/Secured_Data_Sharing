@@ -3,10 +3,9 @@
 
 from flask import Flask, render_template, redirect, url_for,request, jsonify, session
 from flask import make_response
-import mysql.connector
 from mysql.connector import Error
+import mysql.connector
 import requests
-
 
 app = Flask(__name__)
 
