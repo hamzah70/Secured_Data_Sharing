@@ -13,7 +13,7 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def sendMediator():
 	print("hello")
-	r = requests.post('http://0.0.0.0:8080/', data = {'image_filename':'test.jpg', 'image_url': "http://images.come"})
+	r = requests.post('https://0.0.0.0:6000/', data = {'image_filename':'test.jpg', 'image_url': "http://images.come"})
 	return "abc"
 
 @app.route('/createdid', methods=['GET', 'POST'])
