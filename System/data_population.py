@@ -5,15 +5,18 @@ import datetime
 import mysql.connector as sql
 from random import randint, choice, uniform, shuffle
 
-db = sql.connect(user='root', passwd='&TDj6j7>',host='localhost', database = "ip")
-
-query="drop table if exists insurance,hospital;"
-
+db = sql.connect(user='root', passwd='&TDj6j7>',host='localhost')
 cursor=db.cursor()
+
+query="use Hospital;"
 cursor.execute(query)
 db.commit()
 
-query="""CREATE TABLE `hospital` (
+query="drop table if exists Patients;"
+cursor.execute(query)
+db.commit()
+
+query="""CREATE TABLE `Patients` (
 	`Patient_Number` int NOT NULL,
 	`DID_Number` varchar(50) DEFAULT NULL,
 
@@ -64,36 +67,6 @@ query="""CREATE TABLE `hospital` (
 	PRIMARY KEY (`Patient_Number`)
 );"""
 
-cursor=db.cursor()
-cursor.execute(query)
-db.commit()
-
-query="""CREATE TABLE `insurance` (
-	`Case_Number` int NOT NULL,
-	`DID_Number` varchar(50) DEFAULT NULL,
-
-	`Name` varchar(50) NOT NULL,
-	`Age` int NOT NULL,
-	`Gender` VARCHAR(10) NOT NULL,
-	`Phone_Number` bigint NOT NULL,
-	`Family_Members` int NOT NULL,
-	`Married` tinyint NOT NULL,
-	`Occupation` varchar(50) NOT NULL,
-	`Address` varchar(50) NOT NULL,
-
-	`Policy_Number` int NOT NULL,
-	`Policy_Details` varchar(100) NOT NULL,
-	`Period` int NOT NULL,
-	`Amount` float NOT NULL,
-	`Premium` float NOT NULL,
-	`Previous_Claims` float NOT NULL,
-	`Premium_Paid` float NOT NULL,
-	`Premium_Overdue` float NOT NULL,
-	`Lock_In_Period` int NOT NULL,
-	PRIMARY KEY (`Case_Number`)
-);"""
-
-cursor=db.cursor()
 cursor.execute(query)
 db.commit()
 
@@ -163,10 +136,7 @@ for i in range(25):
 	smoke=choice([True,False])
 	drug=choice([True,False])
 	rehab=choice([True,False])
-	if(i<10):
-		did_num=i+1
-	else:
-		did_num=None
+	did_num=None
 	hospital_vals.append((pat_no,did_num,name,age,gender,phone,email,addr,reg_date,doct,corp_coverage,last_visit,last_diag,visits,bgroup,phy_disable,height,
 		weight,allerg,heart_rate,blood_press,blood_oxygen,body_fat,resp_rate,cholestrol_lvl,sleep_duration,haemoglobin,vit_def,canc_type,canc_stage,
 		heart_disease,diabetic,surgery,oragan_rep,fract,alcohol,smoke,drug,rehab))
@@ -222,12 +192,48 @@ hospital_vals.sort()
 
 #print(hospital_vals)
 #for i in range(len(hospital_vals)):
-query="insert into hospital value (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
-cursor=db.cursor()
+
+query="insert into Patients value (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
 cursor.executemany(query,hospital_vals)
 db.commit()
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------
+
+query="use Insurance;"
+cursor.execute(query)
+db.commit()
+
+query="drop table if exists Insurance;"
+cursor.execute(query)
+db.commit()
+
+query="""CREATE TABLE `Insurance` (
+	`Case_Number` int NOT NULL,
+	`DID_Number` varchar(50) DEFAULT NULL,
+
+	`Name` varchar(50) NOT NULL,
+	`Age` int NOT NULL,
+	`Gender` VARCHAR(10) NOT NULL,
+	`Phone_Number` bigint NOT NULL,
+	`Family_Members` int NOT NULL,
+	`Married` tinyint NOT NULL,
+	`Occupation` varchar(50) NOT NULL,
+	`Address` varchar(50) NOT NULL,
+
+	`Policy_Number` int NOT NULL,
+	`Policy_Details` varchar(100) NOT NULL,
+	`Period` int NOT NULL,
+	`Amount` float NOT NULL,
+	`Premium` float NOT NULL,
+	`Previous_Claims` float NOT NULL,
+	`Premium_Paid` float NOT NULL,
+	`Premium_Overdue` float NOT NULL,
+	`Lock_In_Period` int NOT NULL,
+	PRIMARY KEY (`Case_Number`)
+);"""
+
+cursor.execute(query)
+db.commit()
 
 Case_Number = [i for i in range(1,21)]
 shuffle(Case_Number)
@@ -235,9 +241,7 @@ Policy_Number = [i for i in range(1,6)]
 insurance_vals = []
 occupation = ['Defence Personnel','Buisnessman','Govt Employee','Private Employee','Shopkeeper']
 
-for i in range(len(hospital_vals)):
-	if(hospital_vals[i][1]==None):
-		continue
+for i in range(20):
 	case_num=Case_Number.pop()
 	name=hospital_vals[i][2]
 	age=hospital_vals[i][3]
@@ -261,9 +265,7 @@ for i in range(len(hospital_vals)):
 		pol_det,period,amount,premium,prev_claims,premium_paid,premium_overdue,lock_in_period))
 
 insurance_vals.sort()
-
-#for i in range(len(insurance_vals)):
-query="insert into insurance value (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
-cursor=db.cursor()
+print(insurance_vals)
+query="insert into Insurance value (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
 cursor.executemany(query,insurance_vals)
 db.commit()

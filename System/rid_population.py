@@ -8,7 +8,7 @@ import mysql.connector as sql
 db = sql.connect(user='root', passwd='&TDj6j7>',host='localhost')
 cursor=db.cursor()
 
-query="use ip;"
+query="use Hospital;"
 cursor.execute(query)
 db.commit()
 
@@ -20,24 +20,24 @@ query="create table RID (ID TEXT, Document BLOB);"
 cursor.execute(query)
 db.commit()
 
-query="SELECT * FROM hospital;"
+query="SELECT * FROM Patients;"
 cursor.execute(query)
 data = cursor.fetchall()
 
 Documents = {}
 
 for i in range(50):
-    x = rid("Policy_Hospital.txt")
+    x = rid("../Policies/Policy_Hospital.txt")
     data[i] = list(data[i])
     data[i][1] = str(x.getID())
     data[i] = tuple(data[i])
     Documents[str(x.getID())] = pickle.dumps(x)
 
-query="delete from hospital;"
+query="delete from Patients;"
 cursor.execute(query)
 db.commit()
 
-query="insert into hospital value (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
+query="insert into Patients value (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
 cursor.executemany(query,data)
 db.commit()
 
