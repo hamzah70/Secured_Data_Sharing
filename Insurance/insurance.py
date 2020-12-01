@@ -7,22 +7,30 @@ import mysql.connector
 from mysql.connector import Error
 import requests
 
+from insurance_UI import *
+
 
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def sendMediator():
-	print("hello")
-	r = requests.post('https://0.0.0.0:6000/', data = {'image_filename':'test.jpg', 'image_url': "http://images.come"})
+	ridNumber = getRID()
+	r = requests.post('https://0.0.0.0:6000/getRID', data = {"rid": ridNumber}, verify = False)
 	return "abc"
 
-@app.route('/createdid', methods=['GET', 'POST'])
-def createDiD():
+@app.route('/get', methods=['GET', 'POST'])
+def getMediator():
 	if request.method == 'POST':
-		result = request.form
+		x = request.form['x']
+		print(" final result  :    ", x)
+	return "abc"
+
+# @app.route('/createdid', methods=['GET', 'POST'])
+# def createDiD():
+# 	if request.method == 'POST':
+# 		result = request.form
 
 if __name__ == "__main__":
 
 	# openssl req -x509 -newkey rsa:4096 -nodes -out cert.pem -keyout key.pem -days 365
-	app.run(ssl_context=('cert.pem', 'key.pem'))
-	app.run(host='0.0.0.0', port="5000", debug=True)
+	app.run(host='0.0.0.0', port="5000", debug=True, ssl_context=('cert.pem', 'key.pem'))
