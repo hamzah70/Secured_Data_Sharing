@@ -1,8 +1,8 @@
 # Secured Data Movement
 # Ring Fence
 
-import json
 import uuid
+import json
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa,padding
@@ -13,11 +13,11 @@ class rid:
         Record Identifier
             - Uniquely identifies a user record
             - Loads the relevant policy
-            - Segregate attributes according to policy into segments
-            - Generates key pairs for different segments
+            - Segregate attributes into segments, according to the policy 
+            - Generates cryptographic keys for different segments
     '''
 
-    uniqueID = None
+    __uniqueID = None
     __policy = None
     __privateKey = {}           
     __publicKey = {}
@@ -26,7 +26,7 @@ class rid:
 
     def __init__(self, policy_document):
 
-        self.uniqueID = self.__gen_ID()
+        self.__uniqueID = self.__gen_ID()
 
         with open(policy_document) as file:
             self.__policy = json.load(file)
@@ -83,7 +83,7 @@ class rid:
             self.__privateKey[ring] = private
 
     def setPolicy(self, custom_policy):
-        with open(custom_policy,"r") as file:
+        with open(policy_document) as file:
             self.__policy = json.load(file)
         self.__update()
 
