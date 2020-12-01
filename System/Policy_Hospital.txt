@@ -2,11 +2,11 @@
 
 	"Details":
 	{
-		"Index": 1
-		"Creation": "Wed Dec  2 01:18:05 IST 2020"
-		"Period": "600 Days"
+		"Index": 1,
+		"Creation": "Wed Dec  2 01:18:05 IST 2020",
+		"Period": "600 Days",
 		"Organisation": " InsureX"
-	}
+	},
 
 	"Rules": 
 	{"User_Data": { "Name": 1, "Age": 1, "Gender" : 1, "Email" : 0,"Phone_Number" : 0 ,"Address" : 0},
