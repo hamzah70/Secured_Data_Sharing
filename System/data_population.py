@@ -5,7 +5,7 @@ import datetime
 import mysql.connector as sql
 from random import randint, choice, uniform, shuffle
 
-db = sql.connect(user='root', passwd='himraj18',host='localhost', database = "ip")
+db = sql.connect(user='root', passwd='&TDj6j7>',host='localhost', database = "ip")
 
 query="drop table if exists insurance,hospital;"
 

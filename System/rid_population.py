@@ -5,7 +5,7 @@ import pickle
 from RingFence import rid
 import mysql.connector as sql
 
-db = sql.connect(user='root', passwd='himraj18',host='localhost')
+db = sql.connect(user='root', passwd='&TDj6j7>',host='localhost')
 cursor=db.cursor()
 
 query="use ip;"
