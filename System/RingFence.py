@@ -87,7 +87,6 @@ class rid:
         key = Fernet(Fernet.generate_key())
         return key
 
-
 class ring_fence:
 
     __RID = None
