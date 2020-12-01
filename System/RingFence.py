@@ -3,24 +3,14 @@
 
 import uuid
 import json
+import datetime
 from cryptography.fernet import Fernet
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.asymmetric import rsa,padding
 
 class rid:
 
-    '''
-        Record Identifier
-            - Uniquely identifies a user record
-            - Loads the relevant policy
-            - Segregate attributes into segments, according to the policy 
-            - Generates cryptographic keys for different segments
-    '''
-
     __uniqueID = None
     __policy = None
-    __Key = {}
+    __key = {}
     __shared_data = {}
     __confidential_data = []      
 
@@ -30,14 +20,11 @@ class rid:
 
         with open(policy_document) as file:
             self.__policy = json.load(file)
-
         file.close()
 
         self.__update()
 
-
     def __gen_ID(self):
-        # Generates a unique identifier and append it to the record of generated identifiers.
         
         RID = set()
         
@@ -48,9 +35,11 @@ class rid:
 
         file.close()
 
-        x = uuid.uuid1()
+        index = self.__policy["Details"]["Index"]
+
+        x = uuid.uuid1(index)
         while x in RID:
-            x = uuid.uuid1()
+            x = uuid.uuid1(index)
 
         RID.add(x)
 
@@ -62,12 +51,11 @@ class rid:
         return x
 
     def __update(self):
-        # Resolves shareable data and generate keys
 
-        for ring in self.__policy:
+        for ring in self.__policy["Rules"]:
             self.__shared_data[ring] = []
-            for attribute in self.__policy[ring]:
-                if self.__policy[ring][attribute] == 1:
+            for attribute in self.__policy["Rules"][ring]:
+                if self.__policy["Rules"][ring][attribute] == 1:
                     self.__shared_data[ring].append(attribute)
                 else:
                     self.__confidential_data.append(attribute)
@@ -102,32 +90,22 @@ class rid:
 
 class ring_fence:
 
-    '''
-        Ring Fenced Data Block
-            - Accesses data using RID
-            - Creates the ring fences and enforces encryption
-            - Dissolves the ring fences
-            - Returns Extracted Data
-    '''
-
     __RID = None
-    Data_Block = {}
+    __Data_Block = {}
 
     def __init__(self, rid):
         self.__RID = rid
 
-    def create(self, *args):
+    def create(self, args):
 
-        # Creates the ring fence based on policy agreement.
-
-        for ring in self.__RID.__shared_data:
-            self.Data_Block[i] = {} 
+        for ring in self.__RID.getSharedData():
+            self.Data_Block[ring] = {} 
 
         confidential = []
-        temp_key = Fernet(Fernet.generate_key())
-
+        
         for label, data in args:
             for ring in self.__RID.getSharedData():
+
                 if label in self.__RID.getSharedData()[ring]:
                     key = self.__RID.getKey()[ring]
                     encryptedData = encryptData(data,key)
@@ -135,16 +113,17 @@ class ring_fence:
                 else:
                     confidential.append(data)
 
-        data = encryptData(confidential,temp_key)
+        temp_key = Fernet(Fernet.generate_key())
+        masked = encryptData(confidential,temp_key)
 
         Data_Block["MetaData"] = {}
+        Data_Block["MetaData"]["TimeStamp"] = datetime.now()
         Data_Block["MetaData"]["RID"] = self.__RID.getID()
-        Data_Block["MetaData"]["Policy"] = self.__RID.getPolicy()
+        Data_Block["MetaData"]["Policy"] = self.__RID.getPolicy()["Details"]
 
         return Data_Block
 
     def dissolve(self, keys):
-        # Dissolves the ring fence based on policy agreement.
 
         Decrypted_Data = {}
 
@@ -156,7 +135,6 @@ class ring_fence:
                     Decrypted_Data[k] = decryptedData
 
         return Decrypted_Data
-
 
     def encryptData(self, data, key):
         data = str([data]).encode()

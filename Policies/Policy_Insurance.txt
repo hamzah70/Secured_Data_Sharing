@@ -1,6 +1,17 @@
 {
+	"Details":
+	{
+		"Index": 2
+		"Creation": "Wed Dec  2 01:18:05 IST 2020"
+		"Period": "600 Days"
+		"Organisation": "Hospital A"
+	}
+
+	"Rules": 
+	{
 	"User_Data": { "Name": 1, "Age": 1, "Gender" : 1, "Email" : 0,"Phone_Number" : 0 ,"Address" : 1},
 	"Social_Details": {"Married" : 1, "Family_Members" : 1, "Occupation" : 1},
 	"Insurance_Details" : {"Policy_Number" : 1,"Policy_Details" : 1,"Period" : 1,"Amount" : 1},
 	"Premium_Details" : {"Premium" : 1,"Premium_Paid" : 1,"Premium_Overdue" : 1,"Lock_In_Period" : 1,"Previous_Claims" : 1}
+	}
 }
