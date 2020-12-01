@@ -5,7 +5,7 @@ import datetime
 import mysql.connector as sql
 from random import randint, choice, uniform, shuffle
 
-db = sql.connect(user='root', passwd='&TDj6j7>',host='localhost', database = "ip")
+db = sql.connect(user='root', passwd='himraj18',host='localhost', database = "ip")
 
 query="drop table if exists insurance,hospital;"
 
@@ -15,7 +15,7 @@ db.commit()
 
 query="""CREATE TABLE `hospital` (
 	`Patient_Number` int NOT NULL,
-	`DID_Number` int DEFAULT NULL,
+	`DID_Number` varchar(50) DEFAULT NULL,
 
 	`Name` varchar(50) NOT NULL,
 	`Age` int NOT NULL,
@@ -70,7 +70,7 @@ db.commit()
 
 query="""CREATE TABLE `insurance` (
 	`Case_Number` int NOT NULL,
-	`DID_Number` int DEFAULT NULL,
+	`DID_Number` varchar(50) DEFAULT NULL,
 
 	`Name` varchar(50) NOT NULL,
 	`Age` int NOT NULL,
@@ -213,10 +213,7 @@ for i in range(25):
 	smoke=choice([True,False])
 	drug=choice([True,False])
 	rehab=choice([True,False])
-	if(i<10):
-		did_num=10+i+1
-	else:
-		did_num=None
+	did_num=None
 	hospital_vals.append((pat_no,did_num,name,age,gender,phone,email,addr,reg_date,doct,corp_coverage,last_visit,last_diag,visits,bgroup,phy_disable,height,
 		weight,allerg,heart_rate,blood_press,blood_oxygen,body_fat,resp_rate,cholestrol_lvl,sleep_duration,haemoglobin,vit_def,canc_type,canc_stage,
 		heart_disease,diabetic,surgery,oragan_rep,fract,alcohol,smoke,drug,rehab))
@@ -259,7 +256,7 @@ for i in range(len(hospital_vals)):
 	premium_paid=int(round(uniform(0.4,1.0),1)*premium)
 	premium_overdue=premium-premium_paid
 	lock_in_period=randint(2,4)
-	did_num=hospital_vals[i][1]
+	did_num=None
 	insurance_vals.append((case_num,did_num,name,age,gender,phone,family_mem,married,occup,addr,pol_num,
 		pol_det,period,amount,premium,prev_claims,premium_paid,premium_overdue,lock_in_period))
 

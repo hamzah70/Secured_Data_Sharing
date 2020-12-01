@@ -16,11 +16,11 @@ class rid:
 
     def __init__(self, policy_document):
 
-        self.__uniqueID = self.__gen_ID()
-
         with open(policy_document) as file:
             self.__policy = json.load(file)
         file.close()
+
+        self.__uniqueID = self.__gen_ID()
 
         self.__update()
 
@@ -64,7 +64,7 @@ class rid:
 
         for ring in self.__shared_data:
             key = self.__generateKeys()
-            self.__Key[ring] = key
+            self.__key[ring] = key
             
     def setPolicy(self, custom_policy):
         with open(policy_document) as file:
