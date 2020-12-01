@@ -3,6 +3,7 @@
 
 import uuid
 import json
+from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa,padding
@@ -19,8 +20,7 @@ class rid:
 
     __uniqueID = None
     __policy = None
-    __privateKey = {}           
-    __publicKey = {}
+    __Key = {}
     __shared_data = {}
     __confidential_data = []      
 
@@ -72,16 +72,12 @@ class rid:
                 else:
                     self.__confidential_data.append(attribute)
 
-        public, private = self.__generateKeys()
-
-        self.__publicKey["Secret"] = public
-        self.__privateKey["Secret"] = None
+        key = self.__generateKeys()
 
         for ring in self.__shared_data:
-            public, private = self.__generateKeys()
-            self.__publicKey[ring] = public
-            self.__privateKey[ring] = private
-
+            key = self.__generateKeys()
+            self.__Key[ring] = key
+            
     def setPolicy(self, custom_policy):
         with open(policy_document) as file:
             self.__policy = json.load(file)
@@ -96,13 +92,12 @@ class rid:
     def getSharedData(self):
         return self.__shared_data
 
-    def getPublicKey(self):
-        return self.__publicKey
+    def getKey(self):
+        return self.__Key
 
     def __generateKeys(self):
-        private_key = rsa.generate_private_key( public_exponent=65537, key_size=2048, backend=default_backend())
-        public_key = private_key.public_key()
-        return public_key, private_key
+        key = Fernet(Fernet.generate_key())
+        return key
 
 
 class ring_fence:
@@ -128,14 +123,19 @@ class ring_fence:
         for ring in self.__RID.__shared_data:
             self.Data_Block[i] = {} 
 
+        confidential = []
+        temp_key = Fernet(Fernet.generate_key())
+
         for label, data in args:
             for ring in self.__RID.getSharedData():
                 if label in self.__RID.getSharedData()[ring]:
-                    key = self.__RID.getPublicKey()[ring]
+                    key = self.__RID.getKey()[ring]
                     encryptedData = encryptData(data,key)
                     Data_Block[ring][label] = encryptData
                 else:
-                    Data_Block[ring][label] = None
+                    confidential.append(data)
+
+        data = encryptData(confidential,temp_key)
 
         Data_Block["MetaData"] = {}
         Data_Block["MetaData"]["RID"] = self.__RID.getID()
@@ -159,24 +159,11 @@ class ring_fence:
 
 
     def encryptData(self, data, key):
-        encryptedData = key.encrypt(
-                    message,
-                    padding.OAEP(
-                        mgf=padding.MGF1(algorithm=hashes.SHA256()),
-                        algorithm=hashes.SHA256(),
-                        label=None
-                        )
-                    )
+        data = str([data]).encode()
+        encryptedData = key.encrypt(data)
         return encryptedData
 
     def decryptData(self, data, key):
-        decryptedData = key.decrypt(
-                    encrypted,
-                    padding.OAEP(
-                        mgf=padding.MGF1(algorithm=hashes.SHA256()),
-                        algorithm=hashes.SHA256(),
-                        label=None
-                        )
-                    )
-        return decryptedData
-        
+        decryptedData = key.decrypt(data)
+        data = eval(decryptedData.decode())[0]
+        return data
