@@ -5,7 +5,7 @@ import datetime
 import mysql.connector as sql
 from random import randint, choice, uniform, shuffle
 
-db = sql.connect(user='root', passwd='&TDj6j7>',host='localhost')
+db = sql.connect(user='root', passwd='himraj18',host='localhost')
 cursor=db.cursor()
 
 query="use Hospital;"
@@ -18,7 +18,7 @@ db.commit()
 
 query="""CREATE TABLE `Patients` (
 	`Patient_Number` varchar(10) NOT NULL,
-	`DID_Number` varchar(50) DEFAULT NULL,
+	`RID` varchar(50) DEFAULT NULL,
 
 	`Name` varchar(50) NOT NULL,
 	`Age` varchar(5) NOT NULL,
@@ -208,27 +208,27 @@ cursor.execute(query)
 db.commit()
 
 query="""CREATE TABLE `Insurance` (
-	`Case_Number` int NOT NULL,
-	`DID_Number` varchar(50) DEFAULT NULL,
+	`Case_Number` varchar(50) NOT NULL,
+	`RID` varchar(50) DEFAULT NULL,
 
 	`Name` varchar(50) NOT NULL,
-	`Age` int NOT NULL,
+	`Age` varchar(50) NOT NULL,
 	`Gender` VARCHAR(10) NOT NULL,
-	`Phone_Number` bigint NOT NULL,
-	`Family_Members` int NOT NULL,
-	`Married` tinyint NOT NULL,
+	`Phone_Number` varchar(50) NOT NULL,
+	`Family_Members` varchar(50) NOT NULL,
+	`Married` varchar(50) NOT NULL,
 	`Occupation` varchar(50) NOT NULL,
 	`Address` varchar(50) NOT NULL,
 
-	`Policy_Number` int NOT NULL,
+	`Policy_Number` varchar(50) NOT NULL,
 	`Policy_Details` varchar(100) NOT NULL,
-	`Period` int NOT NULL,
-	`Amount` float NOT NULL,
-	`Premium` float NOT NULL,
-	`Previous_Claims` float NOT NULL,
-	`Premium_Paid` float NOT NULL,
-	`Premium_Overdue` float NOT NULL,
-	`Lock_In_Period` int NOT NULL,
+	`Period` varchar(50) NOT NULL,
+	`Amount` varchar(50) NOT NULL,
+	`Premium` varchar(50) NOT NULL,
+	`Previous_Claims` varchar(50) NOT NULL,
+	`Premium_Paid` varchar(50) NOT NULL,
+	`Premium_Overdue` varchar(50) NOT NULL,
+	`Lock_In_Period` varchar(50) NOT NULL,
 	PRIMARY KEY (`Case_Number`)
 );"""
 
