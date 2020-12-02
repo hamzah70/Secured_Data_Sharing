@@ -104,13 +104,13 @@ class ring_fence:
 
                 if label in self.__RID.getSharedData()[ring]:
                     key = self.__RID.getKey()[ring]
-                    encryptedData = encryptData(args[label],key)
+                    encryptedData = self.encryptData(args[label],key)
                     Data_Block[ring][label] = encryptedData
                 else:
                     confidential.append(data)
 
         temp_key = Fernet(Fernet.generate_key())
-        masked = encryptData(confidential,temp_key)
+        masked = self.encryptData(confidential,temp_key)
 
         Data_Block["MetaData"] = {}
         Data_Block["MetaData"]["TimeStamp"] = datetime.now()

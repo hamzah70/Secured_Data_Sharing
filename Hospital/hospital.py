@@ -2,10 +2,10 @@
 # User Interface - Hospital
 
 import mysql.connector as sql
-from RingFence import rid
+from RingFence import rid,ring_fence
 import pickle
 
-db = sql.connect(user='root', passwd='&TDj6j7>',host='localhost')
+db = sql.connect(user='root', passwd='password',host='localhost')
 
 def registerUser():
 	print("Registering User...")
@@ -48,21 +48,17 @@ def fetchData(ridNumber):
 	cursor.execute(query)
 	db.commit()
 	cursor.close()
-
 	cursor=db.cursor()
-	command = "select Document from RID where id='"+ridNumber+"';"
+	command = "select Document from RID where id = '"+str(ridNumber)+"';"
 	cursor.execute(command)
-	db.commit()
 	data = cursor.fetchall()
 	cursor.close()
 	loadData = pickle.loads(data[0][0])
 
 	cursor=db.cursor()
-	command = "select * from Patients where rid="+ridNumber+";"
+	command = "select * from Patients where rid = '"+str(ridNumber)+"';"
 	cursor.execute(command)
-	db.commit()
 	data = cursor.fetchall()
-	cursor.close()
 
 	args = {}
 	for i in range(len(cursor.description)):
@@ -71,9 +67,10 @@ def fetchData(ridNumber):
 		if label!="RID":
 			args[label]=value
 
-	r = RingFence(loadData)
+	cursor.close()
+	r = ring_fence(loadData)
 	r.create(args)
 
 	return r
 
-print(fetchData("bb758087-3426-11eb-bc7c-000000000001"))
+print(fetchData("bb758087-3426-11eb-bc7c-000000000001").getID())
