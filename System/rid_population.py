@@ -5,9 +5,9 @@ import pickle
 from RingFence import rid
 import mysql.connector as sql
 
-db = sql.connect(user='root', passwd='&TDj6j7>',host='localhost')
-cursor=db.cursor()
+db = sql.connect(user='root', passwd='password',host='localhost')
 
+cursor=db.cursor()
 query="use Hospital;"
 cursor.execute(query)
 db.commit()
@@ -19,10 +19,13 @@ db.commit()
 query="create table RID (ID TEXT, Document BLOB);"
 cursor.execute(query)
 db.commit()
+cursor.close()
 
+cursor=db.cursor()
 query="SELECT * FROM Patients;"
 cursor.execute(query)
 data = cursor.fetchall()
+cursor.close()
 
 Documents = {}
 
@@ -33,6 +36,7 @@ for i in range(50):
     data[i] = tuple(data[i])
     Documents[str(x.getID())] = pickle.dumps(x)
 
+cursor=db.cursor()
 query="delete from Patients;"
 cursor.execute(query)
 db.commit()
@@ -45,15 +49,15 @@ query = "insert into RID values (%s,%s)"
 for i in Documents:
     cursor.execute(query,(i,Documents[i]))
     db.commit()
+
+cursor.close()
     
 # query = "SELECT ID, Document FROM RID"
 # cursor.execute(query)
 # for a,b in cursor.fetchall():
-#     print (a,pickle.loads(b).getID())
+#     print (a,pickle.loads(b).getKeys())
 
-db = sql.connect(user='root', passwd='&TDj6j7>',host='localhost')
 cursor=db.cursor()
-
 query="use Insurance;"
 cursor.execute(query)
 db.commit()
@@ -65,10 +69,13 @@ db.commit()
 query="create table RID (ID TEXT, Document BLOB);"
 cursor.execute(query)
 db.commit()
+cursor.close()
 
+cursor=db.cursor()
 query="SELECT * FROM Insurance;"
 cursor.execute(query)
 data = cursor.fetchall()
+cursor.close()
 
 Documents = {}
 
@@ -79,6 +86,7 @@ for i in range(20):
     data[i] = tuple(data[i])
     Documents[str(x.getID())] = pickle.dumps(x)
 
+cursor=db.cursor()
 query="delete from Insurance;"
 cursor.execute(query)
 db.commit()
@@ -91,3 +99,9 @@ query = "insert into RID values (%s,%s)"
 for i in Documents:
     cursor.execute(query,(i,Documents[i]))
     db.commit()
+cursor.close()
+
+# query = "SELECT ID, Document FROM RID"
+# cursor.execute(query)
+# for a,b in cursor.fetchall():
+#     print (a,pickle.loads(b).getKeys())
