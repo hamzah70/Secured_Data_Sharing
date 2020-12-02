@@ -13,7 +13,7 @@ app = Flask(__name__)
 @app.route('/getRID', methods=['GET', 'POST'])
 def getInsurance():
 	if request.method == 'POST':
-		PRINT("HI I'VE GOT IT")
+		print("HI I'VE GOT IT")
 		result = request.form
 		ridNumber = result["rid"]
 		val = verifyRID(ridNumber)
