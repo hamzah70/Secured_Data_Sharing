@@ -88,7 +88,7 @@ class rid:
         return self.__keys
 
     def __generateKeys(self):
-        key = Fernet(Fernet.generate_key())
+        key = Fernet.generate_key()
         return key
 
 class ring_fence:
@@ -102,7 +102,7 @@ class ring_fence:
     def create(self, args):
 
         Shared = eval(self.__RID.getSharedData())
-        Keys = self.__RID.getKeys()
+        Keys = eval(self.__RID.getKeys())
 
         for ring in Shared:
             self.__Data_Block[ring] = {} 
@@ -112,11 +112,11 @@ class ring_fence:
             for ring in Shared:
 
                 if label in Shared[ring]:
-                    key = Keys[ring]
+                    key = Fernet(Keys[ring])
                     encryptedData = self.encryptData(args[label],key)
                     self.__Data_Block[ring][label] = encryptedData
                 else:
-                    confidential.append(data)
+                    confidential.append(args[label])
 
         temp_key = Fernet(Fernet.generate_key())
         masked = self.encryptData(confidential,temp_key)
@@ -129,14 +129,13 @@ class ring_fence:
     def dissolve(self, keys):
 
         Decrypted_Data = {}
-
+        keys = eval(keys)
         for ring in self.__Data_Block:
             if ring != "MetaData":
-                key = keys[ring]
-                decryptedData = decryptData(self.__Data_Block[ring],key)
-                for l in decryptedData:
-                    v = decryptedData[l]
-                    Decrypted_Data[l] = v
+                key = Fernet(keys[ring])
+                for l in self.__Data_Block[ring]:
+                    v = self.__Data_Block[ring][l]
+                    Decrypted_Data[l] = self.decryptData(v,key)
 
         return Decrypted_Data
 

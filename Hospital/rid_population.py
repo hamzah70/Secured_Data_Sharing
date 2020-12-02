@@ -46,10 +46,10 @@ for i in Documents:
     cursor.execute(query,(i,Documents[i]))
     db.commit()
     
-# query = "SELECT ID, Document FROM RID"
-# cursor.execute(query)
-# for a,b in cursor.fetchall():
-#     print (a,pickle.loads(b).getID())
+query = "SELECT ID, Document FROM RID"
+cursor.execute(query)
+for a,b in cursor.fetchall():
+    print (a,pickle.loads(b).getKeys())
 
 # db = sql.connect(user='root', passwd='&TDj6j7>',host='localhost')
 # cursor=db.cursor()

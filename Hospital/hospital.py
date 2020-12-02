@@ -73,24 +73,24 @@ def fetchData(ridNumber):
 
 	return r
 
-#X = fetchData("4e540efa-3465-11eb-b729-000000000001")
-if __name__ == '__main__':
-	cursor=db.cursor()
-	query="use Hospital;"
-	cursor.execute(query)
-	db.commit()
-	cursor.close()
+X = fetchData("63eda818-34d8-11eb-a939-000000000001")
+
+cursor=db.cursor()
+query="use Hospital;"
+cursor.execute(query)
+db.commit()
+cursor.close()
 
 
-	cursor=db.cursor()
-	query = "SELECT ID, Document FROM RID"
-	cursor.execute(query)
-	for a,b in cursor.fetchall():
-	    print (a,pickle.loads(b).getSharedData())
-	# command = "select Document from RID where id = '"+"4e540efa-3465-11eb-b729-000000000001"+"';"
-	# cursor.execute(command)
-	# data = cursor.fetchall()
-	# cursor.close()
-	# loadData = pickle.loads(data[0][0])
-	# print(loadData.getKeys())
-	# print(X.dissolve(loadData.getKeys()))
+cursor=db.cursor()
+# query = "SELECT ID, Document FROM RID"
+# cursor.execute(query)
+# for a,b in cursor.fetchall():
+#     print (a,pickle.loads(b).getSharedData())
+command = "select Document from RID where id = '"+"63eda818-34d8-11eb-a939-000000000001"+"';"
+cursor.execute(command)
+data = cursor.fetchall()
+cursor.close()
+loadData = pickle.loads(data[0][0])
+print(loadData.getKeys())
+print(X.dissolve(loadData.getKeys()))
