@@ -6,7 +6,6 @@ from RingFence import rid
 import pickle
 
 db = sql.connect(user='root', passwd='&TDj6j7>',host='localhost')
-cursor=db.cursor()
 
 def registerUser():
 	print("Registering User...")
@@ -41,23 +40,27 @@ def registerUser():
 	# db.commit()
 
 	print("Registration Completed.")
-	print("RID : " Data["RID"])
+	print("RID : ",Data["RID"])
 
 def fetchData(ridNumber):
 	query="use Hospital;"
 	cursor.execute(query)
 	db.commit()
 
+	cursor=db.cursor()
 	command = "select Document from RID where id='"+ridNumber+"';"
 	cursor.execute(command)
 	db.commit()
 	data = cursor.fetchall()
+	cursor.close()
 	loadData = pickle.loads(data[0][0])
 
+	cursor=db.cursor()
 	command = "select * from Patients where rid="+ridNumber+";"
 	cursor.execute(command)
 	db.commit()
 	data = cursor.fetchall()
+	cursor.close()
 
 	args = {}
 	for i in range(len(cursor.description)):
@@ -70,5 +73,4 @@ def fetchData(ridNumber):
 	r.create(args)
 
 	return r
-
 
