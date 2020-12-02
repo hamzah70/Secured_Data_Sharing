@@ -6,18 +6,19 @@ import json
 import datetime
 from cryptography.fernet import Fernet
 
+
 class rid:
 
     __uniqueID = None
     __policy = None
     __keys = None
-    __shared_data = None
-    __confidential_data = None  
+    __shared = None
+    __masked = None  
 
     def __init__(self, policy_document):
 
-        self.__shared_data = {}
-        self.__confidential_data = []
+        self.__shared = {}
+        self.__masked = []
         self.__keys = {}
 
         with open(policy_document) as file:
@@ -27,8 +28,8 @@ class rid:
         self.__uniqueID = self.__gen_ID()
         self.__update()
 
-        self.__shared_data = str(self.__shared_data)
-        self.__confidential_data = str(self.__confidential_data)
+        self.__shared = str(self.__shared)
+        self.__masked = str(self.__masked)
         self.__keys = str(self.__keys)
 
     def __gen_ID(self):
@@ -39,7 +40,6 @@ class rid:
             data = file.readlines()
             for i in data : 
                 RID.add(i)
-
         file.close()
 
         index = self.__policy["Details"]["Index"]
@@ -52,21 +52,23 @@ class rid:
 
         with open("RID.txt","a") as file:
             file.write(str(x)+"\n")
-
         file.close()
 
         return x
 
     def __update(self):
-        for ring in self.__policy["Rules"]:
-            self.__shared_data[ring] = []
-            for attribute in self.__policy["Rules"][ring]:
-                if self.__policy["Rules"][ring][attribute] == 1:
-                    self.__shared_data[ring].append(attribute)
-                else:
-                    self.__confidential_data.append(attribute)
 
-        for ring in self.__shared_data:
+        for ring in self.__policy["Rules"]:
+            self.__shared[ring] = []
+
+            for attribute in self.__policy["Rules"][ring]:
+
+                if self.__policy["Rules"][ring][attribute] == 1:
+                    self.__shared[ring].append(attribute)
+                else:
+                    self.__masked.append(attribute)
+
+        for ring in self.__shared:
             key = self.__generateKeys()
             self.__keys[ring] = key
             
@@ -81,8 +83,8 @@ class rid:
     def getID(self):
         return self.__uniqueID
 
-    def getSharedData(self):
-        return self.__shared_data
+    def getShared(self):
+        return self.__shared
 
     def getKeys(self):
         return self.__keys
@@ -101,25 +103,29 @@ class ring_fence:
 
     def create(self, args):
 
-        Shared = eval(self.__RID.getSharedData())
+        Shared = eval(self.__RID.getShared())
         Keys = eval(self.__RID.getKeys())
+        Confidential = []
 
         for ring in Shared:
             self.__Data_Block[ring] = {} 
 
-        confidential = []
         for label in args:
+            
             for ring in Shared:
-
+                
                 if label in Shared[ring]:
+
                     key = Fernet(Keys[ring])
                     encryptedData = self.encryptData(args[label],key)
                     self.__Data_Block[ring][label] = encryptedData
+                
                 else:
-                    confidential.append(args[label])
+
+                    Confidential.append(args[label])
 
         temp_key = Fernet(Fernet.generate_key())
-        masked = self.encryptData(confidential,temp_key)
+        masked = self.encryptData(Confidential,temp_key)
 
         self.__Data_Block["MetaData"] = {}
         self.__Data_Block["MetaData"]["TimeStamp"] = datetime.datetime.now()
@@ -130,12 +136,17 @@ class ring_fence:
 
         Decrypted_Data = {}
         keys = eval(keys)
+
         for ring in self.__Data_Block:
+
             if ring != "MetaData":
                 key = Fernet(keys[ring])
-                for l in self.__Data_Block[ring]:
-                    v = self.__Data_Block[ring][l]
-                    Decrypted_Data[l] = self.decryptData(v,key)
+
+                for label in self.__Data_Block[ring]:
+                    value = self.__Data_Block[ring][label]
+                    Decrypted_Data[label] = self.decryptData(value,key)
+            else:
+                Decrypted_Data[ring]=self.__Data_Block[ring]
 
         return Decrypted_Data
 
