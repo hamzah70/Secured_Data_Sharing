@@ -63,5 +63,5 @@ cursor=db.cursor()
 query = "SELECT ID, Document FROM RID"
 cursor.execute(query)
 for a,b in cursor.fetchall():
-    print (a,pickle.loads(b).getSharedData())
+    print (a,pickle.loads(b).getKeys())
 cursor.close()

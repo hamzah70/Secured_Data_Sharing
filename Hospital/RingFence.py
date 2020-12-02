@@ -10,9 +10,9 @@ class rid:
 
     __uniqueID = None
     __policy = None
-    __keys = {}
-    __shared_data = {}
-    __confidential_data = []      
+    __keys = None
+    __shared_data = None
+    __confidential_data = None      
 
     def __init__(self, policy_document):
 
@@ -50,7 +50,9 @@ class rid:
         return x
 
     def __update(self):
-
+        self.__shared_data = {}
+        self.__confidential_data = []
+        self.__keys = {}
         for ring in self.__policy["Rules"]:
             self.__shared_data[ring] = []
             for attribute in self.__policy["Rules"][ring]:
