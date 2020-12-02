@@ -6,7 +6,7 @@ from flask import make_response
 from mysql.connector import Error
 import mysql.connector
 import requests
-from Hospital_UI import *
+from hospital import *
 
 app = Flask(__name__)
 
