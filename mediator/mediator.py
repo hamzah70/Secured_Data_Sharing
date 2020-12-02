@@ -19,7 +19,9 @@ def resolve(R,ridNumber):
 	command = "select Document from RID where ID =" + ridNumber + ");"
 	cursor.execute(command)
 	db.commit()
-	val = cursor.fetchall().getKeys()
+	data = cursor.fetchall()
+	loadData = pickle.loads(data[0][0])
+	val = loadData.getKeys()
 	return predict(R.dissolve(val))
 
 def verifyRID(ridNumber):

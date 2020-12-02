@@ -48,19 +48,27 @@ def fetchData(ridNumber):
 	cursor.execute(query)
 	db.commit()
 
-	command = "select Document from RID where id="+ridNumber+";"
+	command = "select Document from RID where id='"+ridNumber+"';"
 	cursor.execute(command)
 	db.commit()
 	data = cursor.fetchall()
-	loadData = pickle.loads(data)
+	loadData = pickle.loads(data[0][0])
 
 	command = "select * from Patients where rid="+ridNumber+";"
 	cursor.execute(command)
 	db.commit()
 	data = cursor.fetchall()
 
+	args = {}
+	for i in range(len(cursor.description)):
+		label = cursor.description[i][0]
+		value = data[0][i]
+		if label!="RID":
+			args[label]=value
+
 	r = RingFence(loadData)
-	result = r.create(data)
+	r.create(args)
+
 	return r
 
 
