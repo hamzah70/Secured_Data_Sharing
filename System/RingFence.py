@@ -77,8 +77,8 @@ class rid:
     def getSharedData(self):
         return self.__shared_data
 
-    def getKey(self):
-        return self.__Key
+    def getKeys(self):
+        return self.__keys
 
     def __generateKeys(self):
         key = Fernet(Fernet.generate_key())
