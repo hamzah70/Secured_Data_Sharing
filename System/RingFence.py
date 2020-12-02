@@ -10,7 +10,7 @@ class rid:
 
     __uniqueID = None
     __policy = None
-    __key = {}
+    __keys = {}
     __shared_data = {}
     __confidential_data = []      
 
@@ -21,7 +21,6 @@ class rid:
         file.close()
 
         self.__uniqueID = self.__gen_ID()
-
         self.__update()
 
     def __gen_ID(self):
@@ -60,11 +59,9 @@ class rid:
                 else:
                     self.__confidential_data.append(attribute)
 
-        key = self.__generateKeys()
-
         for ring in self.__shared_data:
             key = self.__generateKeys()
-            self.__key[ring] = key
+            self.__keys[ring] = key
             
     def setPolicy(self, custom_policy):
         with open(policy_document) as file:
@@ -102,13 +99,13 @@ class ring_fence:
 
         confidential = []
         
-        for label, data in args:
+        for label in args:
             for ring in self.__RID.getSharedData():
 
                 if label in self.__RID.getSharedData()[ring]:
                     key = self.__RID.getKey()[ring]
-                    encryptedData = encryptData(data,key)
-                    Data_Block[ring][label] = encryptData
+                    encryptedData = encryptData(args[label],key)
+                    Data_Block[ring][label] = encryptedData
                 else:
                     confidential.append(data)
 
@@ -124,12 +121,12 @@ class ring_fence:
 
         Decrypted_Data = {}
 
-        for ring in self.Data_Block.keys():
+        for ring in self.Data_Block:
             key = keys[ring]
-            for k, v in self.Data_Block[ring].items():
-                if v!=None:
-                    decryptedData = decryptData(v,key)
-                    Decrypted_Data[k] = decryptedData
+            decryptedData = decryptData(self.Data_Block[ring],key)
+            for l in decryptedData:
+                v = decryptedData[l]
+                Decrypted_Data[l] = v
 
         return Decrypted_Data
 
