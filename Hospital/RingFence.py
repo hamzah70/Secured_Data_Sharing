@@ -27,6 +27,10 @@ class rid:
         self.__uniqueID = self.__gen_ID()
         self.__update()
 
+        self.__shared_data = str(self.__shared_data)
+        self.__confidential_data = str(self.__confidential_data)
+        self.__keys = str(self.__keys)
+
     def __gen_ID(self):
         
         RID = set()
@@ -97,17 +101,18 @@ class ring_fence:
 
     def create(self, args):
 
-        for ring in self.__RID.getSharedData():
+        Shared = eval(self.__RID.getSharedData())
+        Keys = self.__RID.getKeys()
+
+        for ring in Shared:
             self.__Data_Block[ring] = {} 
 
         confidential = []
-        print(self.__RID.getSharedData())
         for label in args:
-            print(label)
-            for ring in self.__RID.getSharedData():
+            for ring in Shared:
 
-                if label in self.__RID.getSharedData()[ring]:
-                    key = self.__RID.getKey()[ring]
+                if label in Shared[ring]:
+                    key = Keys[ring]
                     encryptedData = self.encryptData(args[label],key)
                     self.__Data_Block[ring][label] = encryptedData
                 else:

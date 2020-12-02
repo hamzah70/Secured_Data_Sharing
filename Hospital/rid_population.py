@@ -51,43 +51,43 @@ for i in Documents:
 # for a,b in cursor.fetchall():
 #     print (a,pickle.loads(b).getID())
 
-db = sql.connect(user='root', passwd='&TDj6j7>',host='localhost')
-cursor=db.cursor()
+# db = sql.connect(user='root', passwd='&TDj6j7>',host='localhost')
+# cursor=db.cursor()
 
-query="use Insurance;"
-cursor.execute(query)
-db.commit()
+# query="use Insurance;"
+# cursor.execute(query)
+# db.commit()
 
-query="drop table if exists RID;"
-cursor.execute(query)
-db.commit()
+# query="drop table if exists RID;"
+# cursor.execute(query)
+# db.commit()
 
-query="create table RID (ID TEXT, Document BLOB);"
-cursor.execute(query)
-db.commit()
+# query="create table RID (ID TEXT, Document BLOB);"
+# cursor.execute(query)
+# db.commit()
 
-query="SELECT * FROM Insurance;"
-cursor.execute(query)
-data = cursor.fetchall()
+# query="SELECT * FROM Insurance;"
+# cursor.execute(query)
+# data = cursor.fetchall()
 
-Documents = {}
+# Documents = {}
 
-for i in range(20):
-    x = rid("../Policies/Policy_Insurance.txt")
-    data[i] = list(data[i])
-    data[i][1] = str(x.getID())
-    data[i] = tuple(data[i])
-    Documents[str(x.getID())] = pickle.dumps(x)
+# for i in range(20):
+#     x = rid("../Policies/Policy_Insurance.txt")
+#     data[i] = list(data[i])
+#     data[i][1] = str(x.getID())
+#     data[i] = tuple(data[i])
+#     Documents[str(x.getID())] = pickle.dumps(x)
 
-query="delete from Insurance;"
-cursor.execute(query)
-db.commit()
+# query="delete from Insurance;"
+# cursor.execute(query)
+# db.commit()
 
-query="insert into Insurance value (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
-cursor.executemany(query,data)
-db.commit()
+# query="insert into Insurance value (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
+# cursor.executemany(query,data)
+# db.commit()
 
-query = "insert into RID values (%s,%s)"
-for i in Documents:
-    cursor.execute(query,(i,Documents[i]))
-    db.commit()
+# query = "insert into RID values (%s,%s)"
+# for i in Documents:
+#     cursor.execute(query,(i,Documents[i]))
+#     db.commit()
