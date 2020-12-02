@@ -74,4 +74,4 @@ def fetchData(ridNumber):
 
 	return r
 
-print(fetchall("bb758087-3426-11eb-bc7c-000000000001"))
+print(fetchData("bb758087-3426-11eb-bc7c-000000000001"))
