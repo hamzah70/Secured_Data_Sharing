@@ -43,9 +43,11 @@ def registerUser():
 	print("RID : ",Data["RID"])
 
 def fetchData(ridNumber):
+	cursor=db.cursor()
 	query="use Hospital;"
 	cursor.execute(query)
 	db.commit()
+	cursor.close()
 
 	cursor=db.cursor()
 	command = "select Document from RID where id='"+ridNumber+"';"
