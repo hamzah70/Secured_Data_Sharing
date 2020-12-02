@@ -95,7 +95,7 @@ class ring_fence:
     def create(self, args):
 
         for ring in self.__RID.getSharedData():
-            self.Data_Block[ring] = {} 
+            self.__Data_Block[ring] = {} 
 
         confidential = []
         
@@ -105,33 +105,30 @@ class ring_fence:
                 if label in self.__RID.getSharedData()[ring]:
                     key = self.__RID.getKey()[ring]
                     encryptedData = self.encryptData(args[label],key)
-                    Data_Block[ring][label] = encryptedData
+                    self.__Data_Block[ring][label] = encryptedData
                 else:
                     confidential.append(data)
 
         temp_key = Fernet(Fernet.generate_key())
         masked = self.encryptData(confidential,temp_key)
 
-        Data_Block["MetaData"] = {}
-        Data_Block["MetaData"]["TimeStamp"] = datetime.now()
-        Data_Block["MetaData"]["RID"] = self.__RID.getID()
-        Data_Block["MetaData"]["Policy"] = self.__RID.getPolicy()["Details"]
+        self.__Data_Block["MetaData"] = {}
+        self.__Data_Block["MetaData"]["TimeStamp"] = datetime.datetime.now()
+        self.__Data_Block["MetaData"]["RID"] = self.__RID.getID()
+        self.__Data_Block["MetaData"]["Policy"] = self.__RID.getPolicy()["Details"]
 
     def dissolve(self, keys):
 
         Decrypted_Data = {}
 
-        for ring in self.Data_Block:
+        for ring in self.__Data_Block:
             key = keys[ring]
-            decryptedData = decryptData(self.Data_Block[ring],key)
+            decryptedData = decryptData(self.__Data_Block[ring],key)
             for l in decryptedData:
                 v = decryptedData[l]
                 Decrypted_Data[l] = v
 
         return Decrypted_Data
-
-    def getBlock(self):
-        return self.__Data_Block
 
     def encryptData(self, data, key):
         data = str([data]).encode()
