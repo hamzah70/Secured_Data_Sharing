@@ -50,6 +50,14 @@ for i in Documents:
     cursor.execute(query,(i,Documents[i]))
     db.commit()
 
+query = "delete from Mediator.RID;"
+cursor.execute(query)
+db.commit()
+
+query = "insert into Mediator.RID select * from Hospital.RID;"
+cursor.execute(query)
+db.commit()
+
 cursor.close()
     
 # query = "SELECT ID, Document FROM RID"
@@ -99,6 +107,11 @@ query = "insert into RID values (%s,%s)"
 for i in Documents:
     cursor.execute(query,(i,Documents[i]))
     db.commit()
+
+query = "insert into Mediator.RID select * from Insurance.RID;"
+cursor.execute(query)
+db.commit()
+
 cursor.close()
 
 # query = "SELECT ID, Document FROM RID"
