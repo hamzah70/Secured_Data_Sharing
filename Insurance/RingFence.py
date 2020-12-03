@@ -96,10 +96,10 @@ class rid:
 class ring_fence:
 
     __RID = None
-    __Data_Block = {}
 
     def __init__(self, rid):
         self.__RID = rid
+        self.__Data_Block = {}
 
     def create(self, args):
 
