@@ -100,9 +100,11 @@ class ring_fence:
 
     def __init__(self, rid):
         self.__RID = rid
+        self.__Data_Block = {}
+        self.__Data_Block = str(self.__Data_Block)
 
     def create(self, args):
-
+        self.__Data_Block = eval(self.__Data_Block)
         Shared = eval(self.__RID.getShared())
         Keys = eval(self.__RID.getKeys())
         Confidential = []
@@ -131,9 +133,11 @@ class ring_fence:
         self.__Data_Block["MetaData"]["TimeStamp"] = datetime.datetime.now()
         self.__Data_Block["MetaData"]["RID"] = self.__RID.getID()
         self.__Data_Block["MetaData"]["Policy"] = self.__RID.getPolicy()["Details"]
+        self.__Data_Block = str(self.__Data_Block)
 
     def dissolve(self, keys):
 
+        self.__Data_Block = eval(self.__Data_Block)
         Decrypted_Data = {}
         keys = eval(keys)
 
@@ -147,8 +151,11 @@ class ring_fence:
                     Decrypted_Data[label] = self.decryptData(value,key)
             else:
                 Decrypted_Data[ring]=self.__Data_Block[ring]
-
+        self.__Data_Block = str(self.__Data_Block)
         return Decrypted_Data
+
+    def getData(self):
+        return eval(self.__Data_Block)
 
     def encryptData(self, data, key):
         data = str([data]).encode()
