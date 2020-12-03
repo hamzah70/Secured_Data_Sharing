@@ -8,20 +8,16 @@ import mysql.connector as sql
 from sklearn.tree import DecisionTreeRegressor
 
 
-db = sql.connect(user='root', passwd='password',host='localhost')
+db = sql.connect(user='root', passwd='scorpio',host='localhost', database='Mediator')
 
 def resolve(R):
-	
+	print("resolve")
 	ridNumber = R.getBlock()["MetaData"]["RID"]
-	cursor=db.cursor()
-	query="use Mediator;"
-	cursor.execute(query)
-	db.commit()
-
-	command = "select Document from RID where ID =" + str(ridNumber) + ");"
-	cursor.execute(command)
-	db.commit()
+	cursor = db.cursor()
+	command = """select Document from RID where ID =%s);"""
+	cursor.execute(command, (ridNumber,))
 	data = cursor.fetchall()
+	db.commit()
 	cursor.close()
 
 	loadData = pickle.loads(data[0][0])
@@ -31,14 +27,15 @@ def resolve(R):
 def verifyRID(ridNumber):
 
 	cursor=db.cursor()
-	query="use Mediator;"
-	cursor.execute(query)
-	db.commit()
+	print("hello")
+	print(ridNumber)
 
-	command = "select exists (select * from RID where ID =" + str(ridNumber) + ");"
-	cursor.execute(command)
-	db.commit()
+	command = """select exists (select * from RID where ID =%s);"""
+	# params = str(ridNumber)
+	cursor.execute(command, (ridNumber,))
 	val = cursor.fetchall()[0][0]
+	db.commit()
+	
 	cursor.close()
 
 	return val

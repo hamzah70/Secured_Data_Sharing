@@ -7,6 +7,9 @@ from mysql.connector import Error
 import mysql.connector
 import requests
 from hospital import *
+from json import dumps as jsonstring
+import pickle
+import jsonpickle
 
 app = Flask(__name__)
 
@@ -16,7 +19,15 @@ def transaction():
 		result = request.form
 		ridNumber = result["rid"]
 		result = fetchData(ridNumber)
-		r = requests.post('https://0.0.0.0:6000/getRF', data = {'result':result}, verify=False)
+		print("printing")
+		# print(result.getBlock())
+		# result = jsonstring(result.__dict__)
+		# print(result)
+		result = result.__dict__
+		# result = pickle.dumps(result)
+		# result = jsonpickle.encode(result)
+		print(result)
+		r = requests.post('https://0.0.0.0:6000/getRF', data = result, verify=False)
 	return "abc"
 
 if __name__ == "__main__":
