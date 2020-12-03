@@ -25,7 +25,4 @@ def getMediator():
 
 if __name__ == "__main__":
 	# openssl req -x509 -newkey rsa:4096 -nodes -out cert.pem -keyout key.pem -days 365
-	#app.run(host='0.0.0.0', port="5000", debug=True, ssl_context=('cert.pem', 'ke
-	ridNumber = getRID()
-        r = requests.post('https://0.0.0.0:6000/getRID', data = {"rid": ridNumber}, verify = False)
-        app.run(host='0.0.0.0', port="5000", debug=True, ssl_context=('cert.pem', 'key.pem'))
+	app.run(host='0.0.0.0', port="5000", debug=True, ssl_context=('cert.pem', 'key.pem'))
