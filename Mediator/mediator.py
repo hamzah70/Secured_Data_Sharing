@@ -8,7 +8,7 @@ import mysql.connector as sql
 from sklearn.tree import DecisionTreeRegressor
 
 
-db = sql.connect(user='root', passwd='scorpio',host='localhost', database='Mediator')
+db = sql.connect(user='root', passwd='password',host='localhost', database='Mediator')
 
 def resolve(R):
 	print("resolve")

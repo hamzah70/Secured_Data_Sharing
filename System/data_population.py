@@ -5,7 +5,7 @@ import datetime
 import mysql.connector as sql
 from random import randint, choice, uniform, shuffle
 
-db = sql.connect(user='root', passwd='&TDj6j7>',host='localhost')
+db = sql.connect(user='root', passwd='password',host='localhost')
 cursor=db.cursor()
 
 query="use Hospital;"

@@ -3,7 +3,7 @@
 
 import mysql.connector as sql
 
-db = sql.connect(user='root', passwd='scorpio',host='localhost')
+db = sql.connect(user='root', passwd='password',host='localhost')
 
 def getRID():
 	print("Enter RID:  ")
