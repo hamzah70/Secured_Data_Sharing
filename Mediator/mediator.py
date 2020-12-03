@@ -8,13 +8,13 @@ import mysql.connector as sql
 from sklearn.tree import DecisionTreeRegressor
 
 
-db = sql.connect(user='root', passwd='scorpio',host='localhost', database='Mediator')
+db = sql.connect(user='root', passwd='password',host='localhost', database='Mediator')
 
 def resolve(R):
 	print("resolve")
-	ridNumber = R.getBlock()["MetaData"]["RID"]
+	ridNumber = str(R.getBlock()["MetaData"]["RID"])
 	cursor = db.cursor()
-	command = """select Document from RID where ID =%s);"""
+	command = """select Document from RID where ID =%s;"""
 	cursor.execute(command, (ridNumber,))
 	data = cursor.fetchall()
 	db.commit()
@@ -25,29 +25,20 @@ def resolve(R):
 	return predict(R.dissolve(val))
 
 def verifyRID(ridNumber):
-
 	cursor=db.cursor()
-	print("hello")
-	print(ridNumber)
-
 	command = """select exists (select * from RID where ID =%s);"""
-	# params = str(ridNumber)
 	cursor.execute(command, (ridNumber,))
 	val = cursor.fetchall()[0][0]
 	db.commit()
-	
 	cursor.close()
-
 	return val
 
 def load_model(filename="insurance_ML_model.pkl"):
-
 	pickle_in = open(filename,"rb")
 	clf = pickle.load(pickle_in)
 	return clf
 
 def preprocess_input(inp):
-
 	cols = ['Age', 'Physical_Disability', 'Allergies', 'Haemoglobin_Level', 'Vitamin_Deficiency', 'Cancer_Stage', 'Heart_Disease', 'Diabetic', 'Surgeries', 'Organ_Replacement', 'Fractures', 'Alcoholic', 'Smoker', 'Drug_Abuse', 'Rehab']
 	X = [[]]
 
@@ -66,7 +57,6 @@ def preprocess_input(inp):
 	return X
 
 def predict(inp):
-
 	X = preprocess_input(inp)
 	clf = load_model()
 

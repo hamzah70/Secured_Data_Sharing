@@ -96,7 +96,7 @@ class rid:
 class ring_fence:
 
     __RID = None
-    __Data_Block = {}
+    __Data_Block = None
 
     def __init__(self, rid):
         self.__RID = rid

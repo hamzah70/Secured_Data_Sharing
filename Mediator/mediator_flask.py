@@ -7,7 +7,7 @@ import mysql.connector
 from mysql.connector import Error
 import requests
 from mediator import *
-from json import loads
+import json
 import ast
 import pickle
 import jsonpickle
@@ -32,13 +32,7 @@ def getInsurance():
 @app.route('/getRF', methods=['GET', 'POST'])
 def getHospital():
 	if request.method == 'POST':
-		print("hello")
-		print(request.form)
-		result = pickle.loads(request.get_data())
-		# result = jsonpickle.decode(request.get_data())
-		print("HOSRES")
-		print(result)
-		print(result.getBlock())
+		result = jsonpickle.decode(json.loads(request.get_data()))
 		x = resolve(result)
 		requests.post('https://0.0.0.0:5000/get', data = {"x": x}, verify=False)
 	return "Abc"

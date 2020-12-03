@@ -6,7 +6,7 @@ import mysql.connector as sql
 from RingFence import rid,ring_fence
 
 
-db = sql.connect(user='root', passwd='scorpio',host='localhost')
+db = sql.connect(user='root', passwd='password',host='localhost')
 
 def fetchData(ridNumber):
 	
