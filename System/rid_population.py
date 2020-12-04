@@ -140,12 +140,11 @@ cursor.execute(query)
 I = cursor.fetchall()
 
 Data = []
-for x in I:
-    for y in H:
+for x in H:
+    for y in I:
         if x[0]==y[0]:
            Data.append((x[1],y[1],"24560_12938_agreement.txt","ML_model.pkl"))
-           Data.append((y[1],x[1],"24560_12938_agreement.txt","ML_model.pkl"))
-
+           
 query = "insert into Mediator.agreement values (%s,%s,%s,%s)"
 for i in range(len(Data)):
     cursor.execute(query,Data[i])

@@ -19,12 +19,11 @@ def getInsurance():
 	if request.method == 'POST':
 		result = request.form
 		ridNumber = result["rid"]
-		val = verifyRID(ridNumber)
-		if val==1:
-			print("found everything")
-			r = requests.post('https://0.0.0.0:7000/', data = {"rid": ridNumber}, verify=False)
+		rid = verify(ridNumber)
+		if rid != 0:
+			r = requests.post('https://0.0.0.0:7000/', data = {"rid": rid}, verify=False)
 		else :
-			print("data not found")
+			print("- Request Rejected -")
 	return "Mediator Server"
 
 
@@ -32,11 +31,12 @@ def getInsurance():
 def getHospital():
 	if request.method == 'POST':
 		result = jsonpickle.decode(json.loads(request.get_data()))
-		x = resolve(result)
+		D, ridNumber = extract(result)
+		x = resolve(D,ridNumber)
 		requests.post('https://0.0.0.0:5000/get', data = {"x": x}, verify=False)
 	return "Mediator Server"
 
 
 if __name__ == "__main__":
 	# openssl req -x509 -newkey rsa:4096 -nodes -out cert.pem -keyout key.pem -days 365
-	app.run(host='0.0.0.0', port="6000", debug=True,ssl_context=('cert.pem', 'key.pem'))
+	app.run(host='0.0.0.0', port="4000", debug=True,ssl_context=('cert.pem', 'key.pem'))

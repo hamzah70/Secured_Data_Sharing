@@ -10,27 +10,46 @@ from sklearn.tree import DecisionTreeRegressor
 
 db = sql.connect(user='root', passwd='password',host='localhost', database='Mediator')
 
-def resolve(R):
+def verify(ridNumber):
+
+	cursor=db.cursor()
+	query = "select exists (select * from Agreement where B = '"+str(ridNumber)+"');"
+	cursor.execute(query)
+	val = cursor.fetchall()[0][0]
+	if val :
+		query = "select A from Agreement where B = '"+str(ridNumber)+"';"
+		cursor.execute(query)
+		r = cursor.fetchall()[0][0]
+		print("[~] Request Verified!")
+	else:
+		r = 0
+	cursor.close()
+	return r
+
+def extract(R):
+	
 	ridNumber = str(R.getBlock()["MetaData"]["RID"])
 	cursor = db.cursor()
-	command = """select Document from RID where ID =%s;"""
-	cursor.execute(command, (ridNumber,))
-	data = cursor.fetchall()
-	db.commit()
+	query = "select Document from RID where ID ='"+str(ridNumber)+"';"
+	cursor.execute(query)
+	data = cursor.fetchall()[0][0]
 	cursor.close()
 
-	loadData = pickle.loads(data[0][0])
-	val = loadData.getKeys()
-	return predict(R.dissolve(val,1))
+	Document = pickle.loads(data)
+	keys = Document.getKeys()
 
-def verifyRID(ridNumber):
-	cursor=db.cursor()
-	command = """select exists (select * from RID where ID =%s);"""
-	cursor.execute(command, (ridNumber,))
-	val = cursor.fetchall()[0][0]
-	db.commit()
+	return R.dissolve(keys,1), ridNumber
+
+def resolve(D,ridNumber):
+
+	cursor = db.cursor()
+	query = "select Code from Agreement where A = '"+str(ridNumber)+"';"
+	cursor.execute(query)
+	data = cursor.fetchall()[0][0]
 	cursor.close()
-	return val
+
+	clf = load_model(data)
+	return predict(D,clf)
 
 def load_model(filename="ML_model.pkl"):
 	pickle_in = open(filename,"rb")
@@ -55,10 +74,8 @@ def preprocess_input(inp):
 
 	return X
 
-def predict(inp):
+def predict(inp,clf):
 	X = preprocess_input(inp)
-	clf = load_model()
-
 	temp = clf.predict(X)[0]
 	
 	if(temp < 250000):
@@ -77,5 +94,6 @@ def predict(inp):
 #test1 = {'Age' : 50, 'Physical_Disability': 'Amputation', 'Allergies' : None, 'Haemoglobin_Level' : 9.0, 'Vitamin_Deficiency': 'Vitamin A Deficient', 'Cancer_Stage' : 2, 'Heart_Disease' : 1, 'Diabetic' : 1, 'Surgeries' : 'Open Heart Surgery', 'Organ_Replacement' : 'Liver Transplant', 'Fractures' : 'Leg Fracture', 'Alcoholic' : 1, 'Smoker' : 1, 'Drug_Abuse' : 1, 'Rehab' : 1}
 #print(predict(test1)) 
 
+#"d171d2d0-3669-11eb-87db-00000000328a"
 
-
+print(verify("d171d2d0-3669-11eb-87db-00000000328a"))

@@ -21,7 +21,7 @@ def transaction():
 		ridNumber = result["rid"]
 		result = fetchData(ridNumber)
 		result = json.dumps(jsonpickle.encode(result))
-		r = requests.post('https://0.0.0.0:6000/getRF', data = result, verify=False, headers=headers)
+		r = requests.post('https://0.0.0.0:4000/getRF', data = result, verify=False, headers=headers)
 	return "Hospital Server"
 
 if __name__ == "__main__":
