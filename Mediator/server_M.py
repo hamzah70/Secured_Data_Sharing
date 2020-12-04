@@ -39,4 +39,4 @@ def getHospital():
 
 if __name__ == "__main__":
 	# openssl req -x509 -newkey rsa:4096 -nodes -out cert.pem -keyout key.pem -days 365
-	app.run(host='0.0.0.0', port="4000", debug=True,ssl_context=('cert.pem', 'key.pem'))
+	app.run(host='0.0.0.0', port="5001", debug=True,ssl_context=('cert.pem', 'key.pem'))

@@ -13,7 +13,7 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def sendMediator():
 	ridNumber = getRID()
-	r = requests.post('https://0.0.0.0:4000/getRID', data = {"rid": ridNumber}, verify = False)
+	r = requests.post('https://0.0.0.0:5001/getRID', data = {"rid": ridNumber}, verify = False)
 	return "Insurance Server"
 
 @app.route('/get', methods=['GET', 'POST'])
