@@ -8,6 +8,20 @@ import mysql.connector as sql
 db = sql.connect(user='root', passwd='password',host='localhost')
 
 cursor=db.cursor()
+query="use Mediator;"
+cursor.execute(query)
+db.commit()
+
+query="drop table if exists Agreement;"
+cursor.execute(query)
+db.commit()
+
+query="create table Agreement (A TEXT,B TEXT, Agreement BLOB, Code BLOB);"
+cursor.execute(query)
+db.commit()
+cursor.close()
+
+cursor=db.cursor()
 query="use Hospital;"
 cursor.execute(query)
 db.commit()
@@ -114,7 +128,35 @@ db.commit()
 
 cursor.close()
 
+
+cursor = db.cursor()
+query = "select Name, RID from Hospital.Patients order by Name;"
+cursor.execute(query)
+H = cursor.fetchall()
+cursor.close()
+
+
+cursor = db.cursor()
+query = "select Name,RID from Insurance.Insurance order by Name;"
+cursor.execute(query)
+I = cursor.fetchall()
+
+Data = []
+for x in I:
+    for y in H:
+        if x[0]==y[0]:
+           Data.append((x[1],y[1]))
+           Data.append((y[1],x[1]))
+
+query = "insert into Mediator.agreement values (%s,%s,null,null)"
+for i in range(len(Data)):
+    cursor.execute(query,Data[i])
+    db.commit()
+
+
 # query = "SELECT ID, Document FROM RID"
 # cursor.execute(query)
 # for a,b in cursor.fetchall():
 #     print (a,pickle.loads(b).getKeys())
+
+
