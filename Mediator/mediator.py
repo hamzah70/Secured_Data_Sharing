@@ -11,7 +11,6 @@ from sklearn.tree import DecisionTreeRegressor
 db = sql.connect(user='root', passwd='password',host='localhost', database='Mediator')
 
 def resolve(R):
-	print("resolve")
 	ridNumber = str(R.getBlock()["MetaData"]["RID"])
 	cursor = db.cursor()
 	command = """select Document from RID where ID =%s;"""
@@ -22,7 +21,7 @@ def resolve(R):
 
 	loadData = pickle.loads(data[0][0])
 	val = loadData.getKeys()
-	return predict(R.dissolve(val))
+	return predict(R.dissolve(val,1))
 
 def verifyRID(ridNumber):
 	cursor=db.cursor()

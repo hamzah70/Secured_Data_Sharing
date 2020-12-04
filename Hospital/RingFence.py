@@ -13,10 +13,11 @@ class rid:
     __policy = None
     __keys = None
     __shared = None
-    __masked = None  
+    __masked = None
 
-    def __init__(self, policy_document):
+    def __init__(self, policy_document, verbose = 0):
 
+        if verbose : print(">> Creating RID Document <<")
         self.__shared = {}
         self.__masked = []
         self.__keys = {}
@@ -25,12 +26,18 @@ class rid:
             self.__policy = json.load(file)
         file.close()
 
+        if verbose : print("> Generated Unique ID")
         self.__uniqueID = self.__gen_ID()
+
+        if verbose : print("> Resolved Policy")
         self.__update()
 
+        if verbose : print("> Generated Ring Keys")
         self.__shared = str(self.__shared)
         self.__masked = str(self.__masked)
         self.__keys = str(self.__keys)
+
+        if verbose : print("[~] RID : ",self.__uniqueID)
 
     def __gen_ID(self):
         
@@ -96,19 +103,26 @@ class rid:
 class ring_fence:
 
     __RID = None
+    __Data_Block = None
 
     def __init__(self, rid):
         self.__RID = rid
         self.__Data_Block = {}
 
-    def create(self, args):
+    def create(self, args, verbose = 0):
+
+        if verbose : print(">> Creating Ring Fences <<")
 
         Shared = eval(self.__RID.getShared())
         Keys = eval(self.__RID.getKeys())
         Confidential = []
 
+        if verbose : print("> Loaded RID Document")
+
         for ring in Shared:
             self.__Data_Block[ring] = {} 
+
+        if verbose : print("> Resolved Attributes")
 
         for label in args:
             
@@ -124,6 +138,8 @@ class ring_fence:
 
                     Confidential.append(args[label])
 
+        if verbose : print("> Encrypted Rings")
+
         temp_key = Fernet(Fernet.generate_key())
         masked = self.encryptData(Confidential,temp_key)
 
@@ -132,13 +148,20 @@ class ring_fence:
         self.__Data_Block["MetaData"]["RID"] = self.__RID.getID()
         self.__Data_Block["MetaData"]["Policy"] = self.__RID.getPolicy()["Details"]
 
+        if verbose : print("> MetaData Resolved")
+        if verbose : print("[~] Ring Fenced Block Generated Successfully")
+
     def getBlock(self):
         return self.__Data_Block
 
-    def dissolve(self, keys):
+    def dissolve(self, keys, verbose = 0):
+
+        if verbose : print(">> Dissolving Ring Fences <<")
 
         Decrypted_Data = {}
         keys = eval(keys)
+
+        if verbose : print("> Loaded Ring Keys")
 
         for ring in self.__Data_Block:
 
@@ -150,6 +173,8 @@ class ring_fence:
                     Decrypted_Data[label] = self.decryptData(value,key)
             else:
                 Decrypted_Data[ring]=self.__Data_Block[ring]
+
+        if verbose : print("[~] Data Extracted Successfully")
 
         return Decrypted_Data
 

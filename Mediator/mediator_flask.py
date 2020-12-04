@@ -16,7 +16,6 @@ app = Flask(__name__)
 
 @app.route('/getRID', methods=['GET', 'POST'])
 def getInsurance():
-	print("Were in")
 	if request.method == 'POST':
 		result = request.form
 		ridNumber = result["rid"]
@@ -26,7 +25,7 @@ def getInsurance():
 			r = requests.post('https://0.0.0.0:7000/', data = {"rid": ridNumber}, verify=False)
 		else :
 			print("data not found")
-	return "abc"
+	return "Mediator Server"
 
 
 @app.route('/getRF', methods=['GET', 'POST'])
@@ -35,7 +34,7 @@ def getHospital():
 		result = jsonpickle.decode(json.loads(request.get_data()))
 		x = resolve(result)
 		requests.post('https://0.0.0.0:5000/get', data = {"x": x}, verify=False)
-	return "Abc"
+	return "Mediator Server"
 
 
 if __name__ == "__main__":

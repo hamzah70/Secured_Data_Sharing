@@ -37,6 +37,6 @@ def fetchData(ridNumber):
 	cursor.close()
 
 	r = ring_fence(RID)
-	r.create(args)
+	r.create(args,1)
 
 	return r

@@ -14,14 +14,14 @@ app = Flask(__name__)
 def sendMediator():
 	ridNumber = getRID()
 	r = requests.post('https://0.0.0.0:6000/getRID', data = {"rid": ridNumber}, verify = False)
-	return "abc"
+	return "Insurance Server"
 
 @app.route('/get', methods=['GET', 'POST'])
 def getMediator():
 	if request.method == 'POST':
 		x = request.form['x']
-		print(" final result  :    ", x)
-	return "abc"
+		print(" Best Policy  :    ", x)
+	return "Insurance Server"
 
 if __name__ == "__main__":
 	# openssl req -x509 -newkey rsa:4096 -nodes -out cert.pem -keyout key.pem -days 365

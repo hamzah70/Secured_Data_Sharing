@@ -22,7 +22,7 @@ def transaction():
 		result = fetchData(ridNumber)
 		result = json.dumps(jsonpickle.encode(result))
 		r = requests.post('https://0.0.0.0:6000/getRF', data = result, verify=False, headers=headers)
-	return "abc"
+	return "Hospital Server"
 
 if __name__ == "__main__":
 	# openssl req -x509 -newkey rsa:4096 -nodes -out cert.pem -keyout key.pem -days 365
