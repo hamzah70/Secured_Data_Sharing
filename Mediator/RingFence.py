@@ -49,7 +49,7 @@ class rid:
                 RID.add(i)
         file.close()
 
-        index = self.__policy["Details"]["Index"]
+        index = self.__policy["Details"]["ID"]
 
         x = uuid.uuid1(index)
         while x in RID:

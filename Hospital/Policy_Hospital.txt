@@ -2,10 +2,11 @@
 
 	"Details":
 	{
-		"Index": 1,
-		"Creation": "Wed Dec  2 01:18:05 IST 2020",
+		"ID": 24560,
+		"Creation": "2020-12-04 20:43:43.281199",
+		"Location": "India",
 		"Period": "600 Days",
-		"Organisation": " InsureX"
+		"Organisation": " Insurance B"
 	},
 
 	"Rules": 
