@@ -32,7 +32,7 @@ def verifyRID(ridNumber):
 	cursor.close()
 	return val
 
-def load_model(filename="insurance_ML_model.pkl"):
+def load_model(filename="ML_model.pkl"):
 	pickle_in = open(filename,"rb")
 	clf = pickle.load(pickle_in)
 	return clf

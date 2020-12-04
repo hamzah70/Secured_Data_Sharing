@@ -16,7 +16,7 @@ query="drop table if exists Agreement;"
 cursor.execute(query)
 db.commit()
 
-query="create table Agreement (A TEXT,B TEXT, Agreement BLOB, Code BLOB);"
+query="create table Agreement (A TEXT,B TEXT, Agreement TEXT, Code TEXT);"
 cursor.execute(query)
 db.commit()
 cursor.close()
@@ -128,13 +128,11 @@ db.commit()
 
 cursor.close()
 
-
 cursor = db.cursor()
 query = "select Name, RID from Hospital.Patients order by Name;"
 cursor.execute(query)
 H = cursor.fetchall()
 cursor.close()
-
 
 cursor = db.cursor()
 query = "select Name,RID from Insurance.Insurance order by Name;"
@@ -145,10 +143,10 @@ Data = []
 for x in I:
     for y in H:
         if x[0]==y[0]:
-           Data.append((x[1],y[1]))
-           Data.append((y[1],x[1]))
+           Data.append((x[1],y[1],"24560_12938_agreement.txt","ML_model.pkl"))
+           Data.append((y[1],x[1],"24560_12938_agreement.txt","ML_model.pkl"))
 
-query = "insert into Mediator.agreement values (%s,%s,null,null)"
+query = "insert into Mediator.agreement values (%s,%s,%s,%s)"
 for i in range(len(Data)):
     cursor.execute(query,Data[i])
     db.commit()
