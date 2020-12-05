@@ -96,4 +96,4 @@ def predict(inp,clf):
 
 #"d171d2d0-3669-11eb-87db-00000000328a"
 
-print(verify("d171d2d0-3669-11eb-87db-00000000328a"))
+# print(verify("d171d2d0-3669-11eb-87db-00000000328a"))
