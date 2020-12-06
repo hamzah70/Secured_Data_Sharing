@@ -20,7 +20,9 @@ def sendMediator():
 def getMediator():
 	if request.method == 'POST':
 		x = request.form['x']
+		print("--------------------------------------------------------")
 		print(" Best Policy  :    ", x)
+		print("--------------------------------------------------------")
 	return "Insurance Server"
 
 if __name__ == "__main__":

@@ -1,2 +1,7 @@
 
 .DS_Store
+Hospital/__pycache__/hospital.cpython-37.pyc
+Hospital/__pycache__/RingFence.cpython-37.pyc
+Insurance/__pycache__/insurance.cpython-37.pyc
+Mediator/__pycache__/mediator.cpython-37.pyc
+Mediator/__pycache__/RingFence.cpython-37.pyc
