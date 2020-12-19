@@ -333,3 +333,27 @@ query = "insert into Agreement values (%s,%s,%s,%s)"
 for i in range(len(data)):
     cursor.execute(query,data[i])
     db.commit()
+
+query="drop table if exists RID;"
+cursor.execute(query)
+db.commit()
+
+query="create table RID (ID TEXT, Document BLOB, Organisation_ID TEXT);"
+cursor.execute(query)
+db.commit()
+
+for i in range(len(rid_hospital_vals)):
+	a,b = rid_hospital_vals[i]
+	rid_hospital_vals[i] = (a,b,"24560")
+
+for i in range(len(rid_insurance_vals)):
+	a,b = rid_insurance_vals[i]
+	rid_insurance_vals[i] = (a,b,"12938")
+
+query="insert into RID value (%s,%s,%s);"
+cursor.executemany(query,rid_hospital_vals)
+db.commit()
+
+query="insert into RID value (%s,%s,%s);"
+cursor.executemany(query,rid_insurance_vals)
+db.commit()

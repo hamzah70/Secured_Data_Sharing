@@ -30,9 +30,10 @@ def extract(R):
 	
 	ridNumber = str(R.getBlock()["MetaData"]["RID"])
 	cursor = db.cursor()
-	query = "select Document from RID where ID ='"+str(ridNumber)+"';"
+	query = "select Document from RID where ID ='"+str(ridNumber)+"' and Organisation_ID = '24560';"
 	cursor.execute(query)
 	data = cursor.fetchall()[0][0]
+	print(data)
 	cursor.close()
 
 	Document = pickle.loads(data)
@@ -40,10 +41,9 @@ def extract(R):
 
 	return R.dissolve(keys,1), ridNumber
 
-def resolve(D,ridNumber):
-
+def resolve(D,org_id=24560):
 	cursor = db.cursor()
-	query = "select Code from Agreement where A = '"+str(ridNumber)+"';"
+	query = "select Code from Agreement where A = '"+str(org_id)+"';"
 	cursor.execute(query)
 	data = cursor.fetchall()[0][0]
 	cursor.close()
@@ -51,9 +51,8 @@ def resolve(D,ridNumber):
 	clf = load_model(data)
 	return predict(D,clf)
 
-def load_model(filename="ML_model.pkl"):
-	pickle_in = open(filename,"rb")
-	clf = pickle.load(pickle_in)
+def load_model(model_obj):
+	clf = pickle.loads(model_obj)
 	return clf
 
 def preprocess_input(inp):

@@ -19,7 +19,7 @@ def getInsurance():
 	if request.method == 'POST':
 		result = request.form
 		ridNumber = result["rid"]
-		rid = int(ridNumber)
+		rid = str(ridNumber)
 		if rid != 0:
 			r = requests.post('https://0.0.0.0:7000/', data = {"rid": rid}, verify=False)
 		else :
@@ -35,7 +35,7 @@ def getHospital():
 			D, ridNumber = extract(result)
 		else:
 			print("\n\nData not found\n\n")
-		x = resolve(D,ridNumber)
+		x = resolve(D)
 		requests.post('https://0.0.0.0:5000/get', data = {"x": x}, verify=False)
 	return "Mediator Server"
 
