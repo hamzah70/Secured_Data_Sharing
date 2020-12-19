@@ -1,7 +1,9 @@
 # Secured Data Movement
 # Data Population
 
+import pickle
 import datetime
+from RingFence import rid
 import mysql.connector as sql
 from random import randint, choice, uniform, shuffle
 
@@ -70,6 +72,14 @@ query="""CREATE TABLE `Patients` (
 cursor.execute(query)
 db.commit()
 
+query="drop table if exists RID;"
+cursor.execute(query)
+db.commit()
+
+query="create table RID (ID TEXT, Document BLOB);"
+cursor.execute(query)
+db.commit()
+
 #-----------------------------------------------------------------------------------------------------------
 
 Patient_Number = [i for i in range(1,51)]
@@ -92,7 +102,9 @@ Cancer_Type = ['Blood Cancer','Lungs Cancer','Prostate Cancer','Skin Cancer']+[N
 Surgeries = ['Open Heart Surgery','LASIK Surgery','Stone Removal Surgery','Cataract Surgery']+[None for i in range(20)]
 Organ_Replacement = ['Liver Transplant','Lungs Transplant','Kidney Transplant']+[None for i in range(20)]
 Fractures = ['Right Hand Thumb Fracture','Left Hand Index Finger Fracture','Left foot fracture','Right foot fracture','Muscle Fracture']+[None for i in range(20)]
-hospital_vals=[]
+
+hospital_vals = []
+rid_hospital_vals = []
 
 for i in range(25):
 	pat_no=Patient_Number[i]
@@ -136,8 +148,10 @@ for i in range(25):
 	smoke=choice([True,False])
 	drug=choice([True,False])
 	rehab=choice([True,False])
-	did_num=None
-	hospital_vals.append((pat_no,did_num,name,age,gender,phone,email,addr,reg_date,doct,corp_coverage,last_visit,last_diag,visits,bgroup,phy_disable,height,
+	rid_doc = rid("../Policies/Policy_Hospital.txt")
+	rid_num = str(rid_doc.getID())
+	rid_hospital_vals.append((rid_num,pickle.dumps(rid_doc)))
+	hospital_vals.append((pat_no,rid_num,name,age,gender,phone,email,addr,reg_date,doct,corp_coverage,last_visit,last_diag,visits,bgroup,phy_disable,height,
 		weight,allerg,heart_rate,blood_press,blood_oxygen,body_fat,resp_rate,cholestrol_lvl,sleep_duration,haemoglobin,vit_def,canc_type,canc_stage,
 		heart_disease,diabetic,surgery,oragan_rep,fract,alcohol,smoke,drug,rehab))
 
@@ -183,8 +197,10 @@ for i in range(25):
 	smoke=choice([True,False])
 	drug=choice([True,False])
 	rehab=choice([True,False])
-	did_num=None
-	hospital_vals.append((pat_no,did_num,name,age,gender,phone,email,addr,reg_date,doct,corp_coverage,last_visit,last_diag,visits,bgroup,phy_disable,height,
+	rid_doc = rid("../Policies/Policy_Hospital.txt")
+	rid_num = str(rid_doc.getID())
+	rid_hospital_vals.append((rid_num,pickle.dumps(rid_doc)))
+	hospital_vals.append((pat_no,rid_num,name,age,gender,phone,email,addr,reg_date,doct,corp_coverage,last_visit,last_diag,visits,bgroup,phy_disable,height,
 		weight,allerg,heart_rate,blood_press,blood_oxygen,body_fat,resp_rate,cholestrol_lvl,sleep_duration,haemoglobin,vit_def,canc_type,canc_stage,
 		heart_disease,diabetic,surgery,oragan_rep,fract,alcohol,smoke,drug,rehab))
 
@@ -195,6 +211,10 @@ hospital_vals.sort()
 
 query="insert into Patients value (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
 cursor.executemany(query,hospital_vals)
+db.commit()
+
+query="insert into RID value (%s,%s);"
+cursor.executemany(query,rid_hospital_vals)
 db.commit()
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -235,11 +255,23 @@ query="""CREATE TABLE `Insurance` (
 cursor.execute(query)
 db.commit()
 
+query="drop table if exists RID;"
+cursor.execute(query)
+db.commit()
+
+query="create table RID (ID TEXT, Document BLOB);"
+cursor.execute(query)
+db.commit()
+
+#----------------------------------------------------------------------------------------------------
+
 Case_Number = [i for i in range(1,21)]
 shuffle(Case_Number)
 Policy_Number = [i for i in range(1,6)]
-insurance_vals = []
 occupation = ['Defence Personnel','Buisnessman','Govt Employee','Private Employee','Shopkeeper']
+
+insurance_vals = []
+rid_insurance_vals = []
 
 for i in range(20):
 	case_num=Case_Number.pop()
@@ -260,8 +292,10 @@ for i in range(20):
 	premium_paid=int(round(uniform(0.4,1.0),1)*premium)
 	premium_overdue=premium-premium_paid
 	lock_in_period=randint(2,4)
-	did_num=None
-	insurance_vals.append((case_num,did_num,name,age,gender,phone,family_mem,married,occup,addr,pol_num,
+	rid_num = hospital_vals[i][1]
+	rid_doc = rid_hospital_vals[i][1]
+	rid_insurance_vals.append((rid_num,rid_doc))
+	insurance_vals.append((case_num,rid_num,name,age,gender,phone,family_mem,married,occup,addr,pol_num,
 		pol_det,period,amount,premium,prev_claims,premium_paid,premium_overdue,lock_in_period))
 
 insurance_vals.sort()
@@ -269,3 +303,33 @@ print(insurance_vals)
 query="insert into Insurance value (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
 cursor.executemany(query,insurance_vals)
 db.commit()
+
+query="insert into RID value (%s,%s);"
+cursor.executemany(query,rid_insurance_vals)
+db.commit()
+
+#-----------------------------------------------------------------------------------------------------------
+
+cursor=db.cursor()
+query="use Mediator;"
+cursor.execute(query)
+db.commit()
+
+query="drop table if exists Agreement;"
+cursor.execute(query)
+db.commit()
+
+agreement_file = open("24560_12938_agreement.txt", "rb")
+ml_model_file = open("ML_model.pkl", "rb")
+
+data = []
+data.append(("24560","12938",agreement_file.read(),ml_model_file.read()))
+
+query="create table Agreement (A TEXT,B TEXT, Agreement BLOB, Code BLOB);"
+cursor.execute(query)
+db.commit()
+
+query = "insert into Agreement values (%s,%s,%s,%s)"
+for i in range(len(data)):
+    cursor.execute(query,data[i])
+    db.commit()
