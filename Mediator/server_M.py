@@ -31,7 +31,7 @@ def getInsurance():
 def getHospital():
 	if request.method == 'POST':
 		result = jsonpickle.decode(json.loads(request.get_data()))
-		if result!=None:
+		if result!="None":
 			D, ridNumber = extract(result)
 		else:
 			print("\n\nData not found\n\n")
