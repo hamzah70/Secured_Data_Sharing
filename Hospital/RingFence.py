@@ -51,9 +51,9 @@ class rid:
 
         index = self.__policy["Details"]["ID"]
 
-        x = uuid.uuid1(index)
+        x = uuid.uuid1()
         while x in RID:
-            x = uuid.uuid1(index)
+            x = uuid.uuid1()
 
         RID.add(x)
 
