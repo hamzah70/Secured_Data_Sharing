@@ -19,7 +19,7 @@ def getInsurance():
 	if request.method == 'POST':
 		result = request.form
 		ridNumber = result["rid"]
-		rid = verify(ridNumber)
+		rid = int(ridNumber)
 		if rid != 0:
 			r = requests.post('https://0.0.0.0:7000/', data = {"rid": rid}, verify=False)
 		else :
@@ -31,7 +31,10 @@ def getInsurance():
 def getHospital():
 	if request.method == 'POST':
 		result = jsonpickle.decode(json.loads(request.get_data()))
-		D, ridNumber = extract(result)
+		if result!=None:
+			D, ridNumber = extract(result)
+		else:
+			print("\n\nData not found\n\n")
 		x = resolve(D,ridNumber)
 		requests.post('https://0.0.0.0:5000/get', data = {"x": x}, verify=False)
 	return "Mediator Server"
