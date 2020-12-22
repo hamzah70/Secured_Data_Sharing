@@ -20,7 +20,6 @@ def fetchData(ridNumber):
 	command = "select ID, Document from RID where id = '"+str(ridNumber)+"';"
 	cursor.execute(command)
 	data = cursor.fetchall()
-	print(data)
 	RID = pickle.loads(data[0][1])
 	cursor.close()
 

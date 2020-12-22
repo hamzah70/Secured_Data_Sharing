@@ -1,1 +1,9 @@
-ABC
+{
+"ID": [24560,12938]
+"Organisation": ["Hospital","Insurance"]
+"Model" : "ML_model.pkl"
+"Creation": "2020-12-04 20:43:43.281199"
+"Location": "India"
+"Period": "600 Days"
+"UserCount":"20"
+}
