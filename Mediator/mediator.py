@@ -33,7 +33,6 @@ def extract(R):
 	query = "select Document from RID where ID ='"+str(ridNumber)+"' and Organisation_ID = '24560';"
 	cursor.execute(query)
 	data = cursor.fetchall()[0][0]
-	print(data)
 	cursor.close()
 
 	Document = pickle.loads(data)
