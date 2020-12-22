@@ -21,7 +21,8 @@ def getMediator():
 	if request.method == 'POST':
 		x = request.form['x']
 		print("--------------------------------------------------------")
-		print(" Best Policy  :    ", x)
+		if x == "NA": print("No insights found for the user!")
+		else: print(" Best Policy  :    ", x)
 		print("--------------------------------------------------------")
 	return "Insurance Server"
 

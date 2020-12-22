@@ -31,11 +31,12 @@ def getInsurance():
 def getHospital():
 	if request.method == 'POST':
 		result = jsonpickle.decode(json.loads(request.get_data()))
-		if result!="None":
+		if result!=None:
 			D, ridNumber = extract(result)
+			x = resolve(D)
 		else:
 			print("\n\nData not found\n\n")
-		x = resolve(D)
+			x = "NA"
 		requests.post('https://0.0.0.0:5000/get', data = {"x": x}, verify=False)
 	return "Mediator Server"
 
